@@ -1,7 +1,7 @@
 ## 帖子 post
 
-- **帖子ID（主键）**postID int
-- 用户ID（用户的外键） userID int
+- **帖子id（主键）**postid int
+- 用户id（用户的外键） userid int
 - 所属主题  post_partition varchar(10)
 - 标题 title varchar(20)
 - 正文内容 content varchar(5000) 
@@ -11,8 +11,8 @@
 - 文件 photos varchar(1000)
 
 CREATE TABLE post (
-  postID INT PRIMARY KEY,
-  userID INT,
+  postid INT PRIMARY KEY,
+  userid INT,
   post_partition VARCHAR(10),
   title VARCHAR(20),
   content VARCHAR(5000),
@@ -24,17 +24,17 @@ CREATE TABLE post (
 
 ## 一级评论 pcomment
 
-- **帖子评论ID（主键）** pcommentID int 主键
-- 用户ID（用户的外键）userID int
-- 评论目标ID（帖子的外键）ptargetID int
+- **帖子评论id（主键）** pcommentid int 主键
+- 用户id（用户的外键）userid int
+- 评论目标id（帖子的外键）ptargetid int
 - 点赞数量 like_num int
 - 评论内容 pctext varchar(1000)
 - 评论时间 time datetime
 
 CREATE TABLE pcomment (
-  pcommentID INT PRIMARY KEY,
-  userID INT,
-  ptargetID INT,
+  pcommentid INT PRIMARY KEY,
+  userid INT,
+  ptargetid INT,
   like_num INT,
   pctext VARCHAR(1000),
   time DATETIME
@@ -42,63 +42,63 @@ CREATE TABLE pcomment (
 
 ## 二级评论 ccomment
 
-- **评论ID（主键）** ccommentID int
-- 用户ID（用户的外键）userID int
-- 评论目标ID（评论的外键）ctargetID int
+- **评论id（主键）** ccommentid int
+- 用户id（用户的外键）userid int
+- 评论目标id（评论的外键）ctargetid int
 - 点赞数量 like_num bigint
 - 评论内容 cctext varchar(100)
 - 评论时间 time datetime
-- 回复用户ID usertargetID int
+- 回复用户id usertargetid int
 
 CREATE TABLE ccomment (
-ccommentID INT PRIMARY KEY,
-userID INT,
-ctargetID INT,
+ccommentid INT PRIMARY KEY,
+userid INT,
+ctargetid INT,
 like_num BIGINT,
 cctext VARCHAR(100),
 time DATETIME,
-usertargetID INT
+usertargetid INT
 );
 
 ## 帖子点赞 plike
 
-- **点赞ID**  plikeID bigint
-- 点赞人ID（用户的外键）userID int
-- 点赞目标ID（帖子的外键）ptargetID int
+- **点赞id**  plikeid bigint
+- 点赞人id（用户的外键）userid int
+- 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE plike (
-  plikeID BIGINT PRIMARY KEY,
-  userID INT,
-  ptargetID INT
+  plikeid BIGINT PRIMARY KEY,
+  userid INT,
+  ptargetid INT
   );
 
 ## 帖子的评论点赞 pclike
 
-- **点赞ID**  pclikeID int
-- 点赞人ID（用户的外键）userID int
-- 点赞目标ID（帖子的外键）pctargetID int
+- **点赞id**  pclikeid int
+- 点赞人id（用户的外键）userid int
+- 点赞目标id（帖子的外键）pctargetid int
 
 CREATE TABLE pclike (
-  pclikeID INT PRIMARY KEY,
-  userID INT,
-  pctargetID INT
+  pclikeid INT PRIMARY KEY,
+  userid INT,
+  pctargetid INT
   );
 
 ## 评论的评论点赞 cclike
 
-- **点赞ID**  cclikeID int
-- 点赞人ID（用户的外键）userID int
-- 点赞目标ID（评论的外键）cctargetID int
+- **点赞id**  cclikeid int
+- 点赞人id（用户的外键）userid int
+- 点赞目标id（评论的外键）cctargetid int
 
 CREATE TABLE cclike (
-  cclikeID INT PRIMARY KEY,
-  userID INT,
-  cctargetID INT
+  cclikeid INT PRIMARY KEY,
+  userid INT,
+  cctargetid INT
   );
 
 ## 用户 user
 
-- **用户ID** userID int
+- **用户id** userid int
 - 手机号 phone char(15)
 - 邮箱号 email varchar(255)
 - 密码 password varchar(255) 
@@ -107,7 +107,7 @@ CREATE TABLE cclike (
 - 封禁到期时间 banTime date
 
 CREATE TABLE user (
-  userID INT PRIMARY KEY,
+  userid INT PRIMARY KEY,
   phone CHAR(15),
   email VARCHAR(255),
   password VARCHAR(255),
@@ -128,14 +128,14 @@ password VARCHAR(100)
 
 ## 举报 sue
 
-- **举报ID** sueID int
+- **举报id** sueid int
 - 举报目标类型 targettype enum
   - 帖子
   - 帖子的评论
   - 评论的评论
 
-- 举报目标ID  ptargetID int
-- 用户ID（举报人ID，用户的外键）userID int
+- 举报目标id  ptargetid int
+- 用户id（举报人id，用户的外键）userid int
 - 举报原因 reason varchar(1000)
 - 举报时间 sue_time datetime
 - 举报处理情况 status varchar(20)/enum
@@ -145,10 +145,10 @@ password VARCHAR(100)
 - 是否处理 finish boolean tinyint(1)
 
 CREATE TABLE sue (
-sueID INT PRIMARY KEY,
+sueid INT PRIMARY KEY,
 targettype ENUM('帖子', '帖子的评论', '评论的评论'),
-ptargetID INT,
-userID INT,
+ptargetid INT,
+userid INT,
 reason VARCHAR(1000),
 sue_time DATETIME,
 status VARCHAR(20),
@@ -157,9 +157,9 @@ finish BOOLEAN
 
 ## 通知 notice
 
-- **通知ID** noticeID int
-- 接受者ID（用户的外键）receiver int
-- 发送者ID（用户的外键）sender int 
+- **通知id** noticeid int
+- 接受者id（用户的外键）receiver int
+- 发送者id（用户的外键）sender int 
 - 通知类型 type enum
   - 帖子被评论 pcomment
   - 评论被评论 ccomment
@@ -168,8 +168,9 @@ finish BOOLEAN
 - 是否已读 read tinyint(1)
 
 CREATE TABLE notice (
-noticeID INT PRIMARY KEY,
+noticeid INT PRIMARY KEY,
 receiver INT,
+sender INT,
 sender INT,
 type ENUM('帖子被评论', '评论被评论', '被惩罚'),
 ntext VARCHAR(100),
@@ -178,12 +179,12 @@ is_read TINYINT(1)
 
 ## 收藏 psave
 
-- **点赞ID**  psaveID int
-- 点赞人ID（用户的外键）userID int
-- 点赞目标ID（帖子的外键）ptargetID int
+- **点赞id**  psaveid int
+- 点赞人id（用户的外键）userid int
+- 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE psave (
-psaveID INT PRIMARY KEY,
-userID INT,
-ptargetID INT
+psaveid INT PRIMARY KEY,
+userid INT,
+ptargetid INT
 );
