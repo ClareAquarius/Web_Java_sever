@@ -1,5 +1,16 @@
 ### 数据库创建
 - 首先根据Database.md的sql创建11个数据表
+- 注意: 要将键值(比如user的usrid) 设为 **anto increase**
+  - 否则将在数据库添加时出现问题
+-----------
+### 安装redis
+- Redis是开放源代码（BSD许可）的内存中数据结构存储，用作数据库，缓存和消息代理。Redis提供数据结构，例如 字符串，哈希，列表，集合，带范围查询的排序集合，位图，超日志，地理空间索引和流。Redis具有内置的复制，Lua脚本，LRU逐出，事务和不同级别的磁盘持久性，并通过以下方式提供高可用性：Redis Sentinel和Redis Cluster自动分区。
+- 下载地址：https://github.com/tporadowski/redis/releasesredis
+- 下载之后，需要进入到Redis目录下打开cmd窗口
+- 输入
+- ```
+  redis-server.exe redis.windows.conf
+  ```
 -----------
 ### 结构说明
 - src里面是主要文件,targe是编译生成的对应文件

@@ -3,11 +3,9 @@ package com.example.generator.controller;
 import com.example.common.Result;
 import com.example.generator.entity.User;
 import com.example.generator.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +24,6 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
-
-    //
     @PostMapping("/login")
     public Result<Map<String,Object>> login(@RequestBody User user){
         Map<String,Object> data=userService.login(user);
@@ -36,11 +32,28 @@ public class UserController {
         }
         return Result.fail(2002,"用户名或者密码错误");
     }
-
-    @GetMapping("/all")
-//    注意这里的返回值,是result类型的,且指明泛型<T>是<List<User>>
-    public Result<List<User>> getAlluser(){
-        List<User> list=userService.list();
-        return Result.success(list);
+    @PostMapping("/register")
+    public Result<String> register(@RequestBody User user) {
+        String data= userService.register(user);
+        if(data == "注册成功")
+        {
+            return Result.success(data);
+        }
+        else
+        {
+            return Result.fail(data);
+        }
+    }
+    @GetMapping("/info")
+    public Result<Map<String,Object>> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
+        //根据token查看用户信息
+        Map<String,Object> data= userService.getUserInfo(modifiedString);
+        //结果不为空,则生成token
+        if(data!=null)
+        {
+            return Result.success(data);
+        }
+        return  Result.fail("无效token");
     }
 }

@@ -1,20 +1,23 @@
 package com.example;
 
-
-import com.example.generator.entity.User;
-import com.example.generator.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+
+
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class JavaServeNewApplicationTests {
 	@Resource
-	private UserMapper userMapper;
+	private RedisTemplate redisTemplate;
+
 	@Test
 	void test(){
-		List<User> users =userMapper.selectList(null);
-		users.forEach(System.out::println);
+
+		String key="1";
+		String loginuser="asada";
+		redisTemplate.opsForValue().set(key,loginuser,30, TimeUnit.MINUTES);
 	}
 }
