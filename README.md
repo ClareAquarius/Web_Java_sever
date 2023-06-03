@@ -12,11 +12,14 @@
   redis-server.exe redis.windows.conf
   ```
 -----------
+
 ### 结构说明
 - src里面是主要文件,targe是编译生成的对应文件
 - src/test可以里面使用@test注解生成测试项目，可以生成测试用例--->单元测试时可以用
 - src/main为主要程序
-- src/main/common已经完成了 JOSN消息封装类Result 和 跨域请求Web..
+- src/main/java/com.example/common 已经完成了 JOSN消息封装类Result 和 跨域请求Web..
+- src/main/java/com.example/config 是redis的相关配置
+
 -----------
 - src/main/generator里面有四个包,其中
   - controller 直接对接web的POST和GET请求, 使用@RequestMapping("<url>")对接前端
@@ -28,3 +31,4 @@
 ### 使用说明
 - src/main里面是主程序，需要在resource/application.yml里面更改数据库的名称，账户名和密码
 - 目前已经调用mybatis自动生成11个表单的增删改查函数，需要的话可以查看 **b站** 或者 **参考我已经完成的代码**
+- 可参考代码 service中的 接口设计 和接口实现
