@@ -1,9 +1,11 @@
 package com.example.generator.controller;
 
 import com.example.common.Result;
+import com.example.generator.entity.User;
 import com.example.generator.entity.message.BrowseMeg;
 import com.example.generator.entity.message.BrowseReturnMeg;
 import com.example.generator.service.IPostService;
+import com.example.generator.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +29,22 @@ import java.util.Map;
 public class PostController {
     @Autowired
     private IPostService postService;
-
+    @Autowired
+    private IUserService userService;
     // 这个brose就不用带 状态码 和 message了
+    // browse--浏览文章--根据user
     @RequestMapping("/browse")
     public ResponseEntity<List<BrowseReturnMeg>> browse(@RequestBody BrowseMeg meg) {
         String partition = meg.getpartition();
         String searchinfo = meg.getSearchinfo();
-        String phone = meg.getUserTelephone();
+        User user = userService.getUserbyPhone(meg.getUserTelephone());
+
 
         if (partition.equals("主页") || partition.isEmpty()) {
-            if (searchinfo == null) {
-                List<BrowseReturnMeg> data = postService.broseAll(partition, searchinfo, phone);
+            // searchinfo是用于搜索帖子的关键词或信息的变量
+            if (searchinfo == null)
+            {
+                List<BrowseReturnMeg> data = postService.broseAll(partition, searchinfo, user);
                 return ResponseEntity.status(HttpStatus.OK).body(data);
             }
         }
