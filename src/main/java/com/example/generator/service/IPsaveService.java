@@ -2,6 +2,8 @@ package com.example.generator.service;
 
 import com.example.generator.entity.Psave;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.generator.entity.message.UpdateLikeMeg;
+import com.example.generator.entity.message.UpdateSaveMeg;
 
 /**
  * <p>
@@ -14,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IPsaveService extends IService<Psave> {
 
 
+    boolean updatepsave(UpdateSaveMeg meg);
 }
