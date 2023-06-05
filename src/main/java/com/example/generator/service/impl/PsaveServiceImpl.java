@@ -1,5 +1,7 @@
 package com.example.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.generator.entity.Plike;
 import com.example.generator.entity.Psave;
 import com.example.generator.mapper.PsaveMapper;
 import com.example.generator.service.IPsaveService;

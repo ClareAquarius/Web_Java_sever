@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private RedisTemplate redisTemplate;
+
+    //登录--验证用户的账号和密码,并为用户生成token,存入redis
     @Override
     public Map<String, Object> login(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -48,6 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return null;
     }
 
+    //注册--涉及增加
     @Override
     public String register(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -65,6 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
     }
 
+    // 验证token,并返回用户数据
     @Override
     public Map<String, Object> getUserInfo(String token) {
         Object obj=redisTemplate.opsForValue().get(token);
@@ -82,5 +86,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return null;
     }
+
+    // 这个是给其他服务类实现的方法
+
 
 }

@@ -24,6 +24,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
+
+    // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
     @PostMapping("/login")
     public Result<Map<String,Object>> login(@RequestBody User user){
         Map<String,Object> data=userService.login(user);
@@ -32,6 +34,8 @@ public class UserController {
         }
         return Result.fail(2002,"用户名或者密码错误");
     }
+
+    // register--注册,验证数据之后 在user数据库添加表项
     @PostMapping("/register")
     public Result<String> register(@RequestBody User user) {
         String data= userService.register(user);
@@ -44,6 +48,8 @@ public class UserController {
             return Result.fail(data);
         }
     }
+
+    // info--验证token,并返回用户数据
     @GetMapping("/info")
     public Result<Map<String,Object>> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
