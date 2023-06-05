@@ -28,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     private RedisTemplate redisTemplate;
 
-    //登录--涉及查询
+    //登录--验证用户的账号和密码,并为用户生成token,存入redis
     @Override
     public Map<String, Object> login(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -68,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
     }
 
-    // 获得token
+    // 验证token,并返回用户数据
     @Override
     public Map<String, Object> getUserInfo(String token) {
         Object obj=redisTemplate.opsForValue().get(token);
@@ -88,13 +88,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     // 这个是给其他服务类实现的方法
-    @Override
-    public User getUserbyPhone(String phone) {
-        LambdaQueryWrapper<User> wrapper_user=new LambdaQueryWrapper<>();
-        wrapper_user.eq(User::getPhone,phone);
-        User user=this.baseMapper.selectOne(wrapper_user);
-        return user;
-    }
 
 
 }

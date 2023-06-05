@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPsaveService extends IService<Psave> {
 
-    boolean search(Integer userid, Integer postid);
+
 }

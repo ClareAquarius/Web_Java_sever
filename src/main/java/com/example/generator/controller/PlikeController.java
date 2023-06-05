@@ -29,6 +29,9 @@ public class PlikeController {
     @Autowired
     private IPlikeService plikeService;
 
+    // 点赞/取赞功能
+    // 点赞增加post的like数 并在plike添加表项
+    // 取赞取消post的like数 并在plike中删除对应表项
     @RequestMapping("/updateLike")
     public ResponseEntity<Object> browse(@RequestBody UpdateLikeMeg meg) {
         if(plikeService.updateplike(meg))

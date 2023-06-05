@@ -1,5 +1,5 @@
 package com.example.generator.entity.message;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class UpdateLikeMeg {
     private boolean isLiked;
     private int postID;
@@ -7,9 +7,9 @@ public class UpdateLikeMeg {
     public boolean isLiked() {
         return isLiked;
     }
-
+    @JsonProperty("isLiked")
     public void setLiked(boolean liked) {
-        this.isLiked = liked;
+        isLiked = liked;
     }
 
     public int getPostID() {
@@ -27,5 +27,8 @@ public class UpdateLikeMeg {
     public void setUserTelephone(String userTelephone) {
         this.userTelephone = userTelephone;
     }
+
+
+
 
 }

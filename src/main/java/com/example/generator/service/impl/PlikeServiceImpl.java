@@ -1,16 +1,17 @@
 package com.example.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Plike;
+import com.example.generator.entity.Post;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.UpdateLikeMeg;
 import com.example.generator.mapper.PlikeMapper;
+import com.example.generator.mapper.PostMapper;
+import com.example.generator.mapper.UserMapper;
 import com.example.generator.service.IPlikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.generator.service.IPostService;
-import com.example.generator.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,56 +26,50 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlikeServiceImpl extends ServiceImpl<PlikeMapper, Plike> implements IPlikeService {
     @Autowired
-    private IUserService userService;
+    private UserMapper userMapper;
 
     @Autowired
-    private IPostService postService;
-    // 根据消息更新plike
+    private PostMapper postMapper;
+
     @Override
-    public boolean updateplike(UpdateLikeMeg meg)
-    {
-        // 调用自定义的userService方法phone获得userid
-        User user=userService.getUserbyPhone(meg.getUserTelephone());
-        boolean if_like_before= meg.isLiked();
+    public boolean updateplike(UpdateLikeMeg meg) {
+        User user = getUserByPhone(meg.getUserTelephone());
+        boolean if_like_before = meg.isLiked();
         Integer result;
-        // 点赞--增加plike表项,并增加该post的like数
-        if(!if_like_before)
-        {
-            Plike plike=new Plike();
+        // 点赞--增加对应post的like，添加clike表单
+        if (if_like_before==false) {
+            Plike plike = new Plike();
             plike.setPtargetid(meg.getPostID());
             plike.setUserid(user.getUserid());
-            result=this.baseMapper.insert(plike);
-            postService.addlike(1,meg.getPostID());
+            result = this.baseMapper.insert(plike);
+            addLikeCount(meg.getPostID());
         }
-        //取消赞--删除plike表项,并减少该post的like数
+        // 取赞--减少对应post的like，删除clike表单
         else
         {
-            LambdaQueryWrapper<Plike> wrapper=new LambdaQueryWrapper<>();
-            wrapper.eq(Plike::getUserid,user.getUserid());
-            wrapper.eq(Plike::getPtargetid,meg.getPostID());
-            result=this.baseMapper.delete(wrapper);
-            postService.addlike(-1,meg.getPostID());
+            LambdaQueryWrapper<Plike> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Plike::getUserid, user.getUserid());
+            wrapper.eq(Plike::getPtargetid, meg.getPostID());
+            result = this.baseMapper.delete(wrapper);
+            subLikeCount(meg.getPostID());
         }
-
-        if(result>0)
-        {
-            return true;
-        }
-        return  false;
+        return result > 0;
     }
 
-    // 根据userid和postid查询用户是否点赞
-    @Override
-    public boolean search(Integer userid, Integer postid) {
-        LambdaQueryWrapper<Plike> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(Plike::getUserid,userid);
-        wrapper.eq(Plike::getPtargetid,postid);
-        Plike plike=this.baseMapper.selectOne(wrapper);
-        // 找到了点赞信息,就返回true
-        if(plike!=null)
-        {
-            return true;
-        }
-        return false;
+    private User getUserByPhone(String phone) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getPhone, phone);
+        return userMapper.selectOne(wrapper);
+    }
+
+    private void addLikeCount(int postId) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postId).setSql("like_num = like_num  + 1");
+        postMapper.update(null, updateWrapper);
+    }
+    private void subLikeCount(int postId) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postId).setSql("like_num = like_num  - 1");
+        postMapper.update(null, updateWrapper);
     }
 }

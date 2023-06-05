@@ -18,7 +18,6 @@ import java.util.Map;
  * @since 2023-06-02
  */
 public interface IPostService extends IService<Post> {
-    List<BrowseReturnMeg> broseAll(String partition, String searchinfo, User user);
 
-    void addlike(int i, int postID);
+    List<BrowseReturnMeg> broseAll(String partition, String searchinfo, String userTelephone);
 }

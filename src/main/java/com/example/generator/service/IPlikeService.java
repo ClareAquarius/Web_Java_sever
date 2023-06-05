@@ -16,5 +16,4 @@ public interface IPlikeService extends IService<Plike> {
 
     boolean updateplike(UpdateLikeMeg meg);
 
-    boolean search(Integer userid, Integer postid);
 }

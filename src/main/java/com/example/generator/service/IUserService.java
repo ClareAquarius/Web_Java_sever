@@ -21,8 +21,5 @@ public interface IUserService extends IService<User> {
 
     Map<String, Object> getUserInfo(String token);
 
-//    通过phone得到userid的方法
-    User getUserbyPhone(String phone);
-
 
 }
