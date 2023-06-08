@@ -95,7 +95,8 @@ public class PostController {
 //                    out.println("path= "+path);
                     String dst = path + newFilename;
 //                    out.println(dst);
-                    String fileUrl = "/static/images/PostImages/" + newFilename;
+//                    String fileUrl = "/static/images/PostImages/" + newFilename;
+                    String fileUrl = "/PostImages/" + newFilename;
                     urls.add(fileUrl);
                     File destFile = new File(dst);
                     if (!destFile.getParentFile().exists()) {
