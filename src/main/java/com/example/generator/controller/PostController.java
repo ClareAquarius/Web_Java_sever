@@ -1,9 +1,9 @@
 package com.example.generator.controller;
 
+import com.example.utils.TextModeration;
 import com.example.generator.entity.Post;
 import com.example.generator.entity.message.BrowseMeg;
 import com.example.generator.entity.message.BrowseReturnMeg;
-import com.example.utils.TextModeration;
 import com.example.generator.entity.message.PostMeg;
 import com.example.generator.service.IPostService;
 import com.example.generator.service.IUserService;
