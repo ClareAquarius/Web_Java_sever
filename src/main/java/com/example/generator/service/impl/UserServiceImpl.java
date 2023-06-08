@@ -96,5 +96,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return user;
     }
 
+    @Override
+    public User getUserByID(Integer sender) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserid, sender);
+        User user = this.baseMapper.selectOne(wrapper);
+        return user;
+    }
+
 
 }

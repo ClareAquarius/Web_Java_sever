@@ -1,6 +1,5 @@
 package com.example.generator.controller;
 
-import com.example.generator.entity.Ccomment;
 import com.example.generator.entity.Pcomment;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.PostPcommentMsg;
@@ -38,6 +37,8 @@ public class PcommentController {
     private IPostService postService;
     @Autowired
     private INoticeService noticeService;
+
+    // 展示一级评论详情
     @RequestMapping("/showPcomments")
     public ResponseEntity<Object> showPcomments(@RequestBody showPostDetailsMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
@@ -49,10 +50,9 @@ public class PcommentController {
         List<PostPcommentReturnMsg> returnMsgList=new ArrayList<>();
 
         for(Pcomment pcomment:pcommentList){
-            // *****这里先省略 评论的评论 获得方式****
-            List<Ccomment> list=new ArrayList<>();
-            // 暂时还没写
-            // 根据用户id和一级评论的id来查询用户是否点赞
+            // *****这里省略 评论的评论 获得方式****
+            List<Object> list=new ArrayList<>();
+            // 根据用户id和评论的id来查询用户是否点赞
             boolean like=pclikeService.searchIflike(user.getUserid(),pcomment.getPcommentid());
             PostPcommentReturnMsg m=new PostPcommentReturnMsg(pcomment,user,like,list);
             returnMsgList.add(m);
@@ -61,7 +61,7 @@ public class PcommentController {
         return ResponseEntity.status(HttpStatus.OK).body(returnMsgList);
     }
 
-    // 发表评论,增加pcomment表项,并增加对应post的comment数量,并发送通知
+    // 发表评论,增加pcomment表项,并增加对应post的comment数量,增加notice的表项
     @RequestMapping("/postPcomment")
     public ResponseEntity<Object> pcomment(@RequestBody PostPcommentMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
@@ -74,14 +74,15 @@ public class PcommentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("评论不能为空");
         }
         Pcomment pcomment=new Pcomment(user.getUserid(),msg.getPostID(),msg.getContent());
-        pcommentService.addPcomment(pcomment);
+        int target=pcommentService.addPcomment(pcomment);
         postService.addPostCommit(msg.getPostID());
+
         // 获得发帖人的id信息
         int postUserid=postService.getUseridByPostid(msg.getPostID());
         // 如果帖主不是自己,那么增加一条Notice
         if(postUserid!=user.getUserid())
         {
-            noticeService.addNotice(user.getUserid(),postUserid,new String("帖子被评论"),msg.getContent());
+            noticeService.addNotice(user.getUserid(),postUserid,msg.getPostID(),new String("帖子被评论"),msg.getContent(), target);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
