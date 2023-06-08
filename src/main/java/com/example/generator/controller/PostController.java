@@ -1,6 +1,7 @@
 package com.example.generator.controller;
 
 import com.example.generator.entity.Post;
+import com.example.generator.entity.User;
 import com.example.generator.entity.message.BrowseMeg;
 import com.example.generator.entity.message.BrowseReturnMeg;
 import com.example.generator.entity.message.PostMeg;
@@ -56,7 +57,7 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.OK).body(data);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
@@ -66,9 +67,8 @@ public class PostController {
         String title = postMeg.getTitle();
         String userTelephone = postMeg.getUserTelephone();
 //
-        Integer userid = userService.getUserIdByPhone(userTelephone);
-
-        Post post = new Post(userid, title, content, partition);
+        User user = userService.getUserByPhone(userTelephone);
+        Post post = new Post(user.getUserid(), title, content, partition);
 //
         int result = postService.addPost(post);
         if (result > 0) {

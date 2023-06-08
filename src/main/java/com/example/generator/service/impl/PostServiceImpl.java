@@ -1,6 +1,7 @@
 package com.example.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Plike;
 import com.example.generator.entity.Post;
 import com.example.generator.entity.Psave;
@@ -111,6 +112,20 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         } else {
             return "删除失败";
         }
+    }
+
+    @Override
+    public void postAddLikeCount(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("like_num = like_num  + 1");
+        this.update(null, updateWrapper);
+    }
+
+    @Override
+    public void postsubLikeCount(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("like_num = like_num  - 1");
+        this.update(null, updateWrapper);
     }
 
 }

@@ -15,6 +15,7 @@ import com.example.generator.entity.message.UpdateSaveMeg;
  */
 public interface IPsaveService extends IService<Psave> {
 
+    void insertpsave(Psave psave);
 
-    boolean updatepsave(UpdateSaveMeg meg);
+    void deletepsave(Integer userid, int postID);
 }
