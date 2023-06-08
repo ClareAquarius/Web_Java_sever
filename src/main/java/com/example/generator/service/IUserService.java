@@ -20,4 +20,8 @@ public interface IUserService extends IService<User> {
     String register(User user);
 
     Map<String, Object> getUserInfo(String token);
+
+    Integer getUserIdByPhone(String phone);
+
+
 }
