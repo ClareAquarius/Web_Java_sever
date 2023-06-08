@@ -24,7 +24,15 @@ public class Notice implements Serializable {
 
     private String ntext;
 
-    private Boolean isRead;
+    private int isRead;
+
+    public Notice(Integer senderid, int recrid, String type, String content) {
+        receiver=recrid;
+        sender=senderid;
+        this.type=type;
+        ntext=content;
+        isRead=0;
+    }
 
     public Integer getNoticeid() {
         return noticeid;
@@ -61,11 +69,11 @@ public class Notice implements Serializable {
     public void setNtext(String ntext) {
         this.ntext = ntext;
     }
-    public Boolean getIsRead() {
+    public int getIsRead() {
         return isRead;
     }
 
-    public void setIsRead(Boolean isRead) {
+    public void setIsRead(int isRead) {
         this.isRead = isRead;
     }
 

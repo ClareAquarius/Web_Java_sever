@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface INoticeService extends IService<Notice> {
 
+    void addNotice(Integer sendid, int recrid, String type, String content);
 }

@@ -36,6 +36,8 @@ public class PcommentController {
     private IPclikeService pclikeService;
     @Autowired
     private IPostService postService;
+    @Autowired
+    private INoticeService noticeService;
     @RequestMapping("/showPcomments")
     public ResponseEntity<Object> showPcomments(@RequestBody showPostDetailsMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
@@ -59,7 +61,7 @@ public class PcommentController {
         return ResponseEntity.status(HttpStatus.OK).body(returnMsgList);
     }
 
-    // 发表评论,增加pcomment表项,并增加对应post的comment数量
+    // 发表评论,增加pcomment表项,并增加对应post的comment数量,并发送通知
     @RequestMapping("/postPcomment")
     public ResponseEntity<Object> pcomment(@RequestBody PostPcommentMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
@@ -74,6 +76,13 @@ public class PcommentController {
         Pcomment pcomment=new Pcomment(user.getUserid(),msg.getPostID(),msg.getContent());
         pcommentService.addPcomment(pcomment);
         postService.addPostCommit(msg.getPostID());
+        // 获得发帖人的id信息
+        int postUserid=postService.getUseridByPostid(msg.getPostID());
+        // 如果帖主不是自己,那么增加一条Notice
+        if(postUserid!=user.getUserid())
+        {
+            noticeService.addNotice(user.getUserid(),postUserid,new String("帖子被评论"),msg.getContent());
+        }
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
     }
