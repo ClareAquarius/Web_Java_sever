@@ -3,6 +3,7 @@ package com.example.generator.controller;
 import com.example.common.Result;
 import com.example.generator.entity.message.BrowseMeg;
 import com.example.generator.entity.message.BrowseReturnMeg;
+import com.example.utils.TextModeration;
 import com.example.generator.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
