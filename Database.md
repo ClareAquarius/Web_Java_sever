@@ -11,7 +11,7 @@
 - 文件 photos varchar(1000)
 
 CREATE TABLE post (
-  postid INT PRIMARY KEY,
+  postid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   post_partition VARCHAR(10),
   title VARCHAR(20),
@@ -32,7 +32,7 @@ CREATE TABLE post (
 - 评论时间 time datetime
 
 CREATE TABLE pcomment (
-  pcommentid INT PRIMARY KEY,
+  pcommentid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   ptargetid INT,
   like_num INT,
@@ -51,7 +51,7 @@ CREATE TABLE pcomment (
 - 回复用户id usertargetid int
 
 CREATE TABLE ccomment (
-ccommentid INT PRIMARY KEY,
+ccommentid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 userid INT,
 ctargetid INT,
 like_num BIGINT,
@@ -67,7 +67,7 @@ usertargetid INT
 - 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE plike (
-  plikeid BIGINT PRIMARY KEY,
+  plikeid BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   ptargetid INT
   );
@@ -79,7 +79,7 @@ CREATE TABLE plike (
 - 点赞目标id（帖子的外键）pctargetid int
 
 CREATE TABLE pclike (
-  pclikeid INT PRIMARY KEY,
+  pclikeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   pctargetid INT
   );
@@ -91,7 +91,7 @@ CREATE TABLE pclike (
 - 点赞目标id（评论的外键）cctargetid int
 
 CREATE TABLE cclike (
-  cclikeid INT PRIMARY KEY,
+  cclikeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   cctargetid INT
   );
@@ -107,7 +107,7 @@ CREATE TABLE cclike (
 - 封禁到期时间 banTime date
 
 CREATE TABLE user (
-  userid INT PRIMARY KEY,
+  userid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   phone CHAR(15),
   email VARCHAR(255),
   password VARCHAR(255),
@@ -145,7 +145,7 @@ password VARCHAR(100)
 - 是否处理 finish boolean tinyint(1)
 
 CREATE TABLE sue (
-sueid INT PRIMARY KEY,
+sueid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 targettype ENUM('帖子', '帖子的评论', '评论的评论'),
 ptargetid INT,
 userid INT,
@@ -168,7 +168,7 @@ finish BOOLEAN
 - 是否已读 read tinyint(1)
 
 CREATE TABLE notice (
-noticeid INT PRIMARY KEY,
+noticeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 receiver INT,
 sender INT,
 sender INT,
@@ -184,7 +184,7 @@ is_read TINYINT(1)
 - 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE psave (
-psaveid INT PRIMARY KEY,
+psaveid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 userid INT,
 ptargetid INT
 );
