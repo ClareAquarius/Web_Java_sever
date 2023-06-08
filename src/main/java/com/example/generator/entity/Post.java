@@ -33,6 +33,16 @@ public class Post implements Serializable {
 
     private String photos;
 
+    public Post(Integer userid, String title, String content, String postPartition) {
+        this.userid = userid;
+        this.title = title;
+        this.content = content;
+        this.postPartition = postPartition;
+        this.commentNum = 0;
+        this.likeNum = 0;
+        this.postTime = LocalDateTime.now();
+    }
+
     public Integer getPostid() {
         return postid;
     }

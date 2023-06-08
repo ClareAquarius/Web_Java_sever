@@ -91,5 +91,27 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         }
         return resultList;
     }
+
+    @Override
+    public Integer addPost(Post post) {
+
+        int result = this.baseMapper.insert(post);
+        if (result > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public String deletePost(Integer postId) {
+        int result = this.baseMapper.deleteById(postId);
+        if (result > 0) {
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
+    }
+
 }
 
