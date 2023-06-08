@@ -138,4 +138,10 @@ public class PostController {
         showPostDetailsReturnMsg returnMsg=new showPostDetailsReturnMsg(post,user,like,save);
         return ResponseEntity.status(HttpStatus.OK).body(returnMsg);
     }
+
+    @PostMapping("/deletePost")
+    public ResponseEntity<Object> deletePost(@RequestBody DeleteMeg deletemeg) {
+        String msg = postService.deletePost(deletemeg.getPostID());
+        return ResponseEntity.status(HttpStatus.OK).body("111");
+    }
 }

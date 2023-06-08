@@ -122,7 +122,8 @@ CREATE TABLE user (
 - 密码 password varchar(100)
 
 CREATE TABLE admin (
-account VARCHAR(100) PRIMARY KEY,
+adminid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+account VARCHAR(100),
 password VARCHAR(100)
 );
 

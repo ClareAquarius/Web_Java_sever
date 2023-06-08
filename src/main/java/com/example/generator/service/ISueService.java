@@ -1,6 +1,7 @@
 package com.example.generator.service;
 
-import com.example.generator.entity.Sue;
+import com.example.generator.entity.*;
+import com.example.generator.entity.message.SueMeg;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-06-02
  */
 public interface ISueService extends IService<Sue> {
-
+    String submitSue(Sue sue);
 }
