@@ -1,7 +1,11 @@
 package com.example.generator.entity.message;
 
 import com.example.generator.entity.Ccomment;
+import com.example.generator.entity.Pcomment;
+import com.example.generator.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 public class PostPcommentReturnMsg {
     @JsonProperty("Author")
@@ -26,7 +30,19 @@ public class PostPcommentReturnMsg {
     private int PcommentID;
 
     @JsonProperty("SubComments")
-    private Ccomment[] SubComments;
+    private List<Ccomment> SubComments;
+
+    public PostPcommentReturnMsg(Pcomment pcomment, User user, boolean like, List<Ccomment> list) {
+        Author=user.getName();
+        AuthorAvatar=user.getProfile();
+        CommentTime=pcomment.getTime().toString();
+        Content=pcomment.getPctext();
+        IsLiked=like;
+        LikeNum=pcomment.getLikeNum();
+        PcommentID=pcomment.getPcommentid();
+        SubComments=list;
+    }
+
 
     public String getAuthor() {
         return Author;
@@ -84,11 +100,11 @@ public class PostPcommentReturnMsg {
         PcommentID = pcommentID;
     }
 
-    public Ccomment[] getSubComments() {
+    public List<Ccomment> getSubComments() {
         return SubComments;
     }
 
-    public void setSubComments(Ccomment[] subComments) {
+    public void setSubComments(List<Ccomment> subComments) {
         SubComments = subComments;
     }
 

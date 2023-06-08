@@ -30,4 +30,17 @@ public class PlikeServiceImpl extends ServiceImpl<PlikeMapper, Plike> implements
         wrapper.eq(Plike::getPtargetid, postID);
         this.baseMapper.delete(wrapper);
     }
+
+    @Override
+    public boolean searchIflike(Integer userid, int PostID) {
+        LambdaQueryWrapper<Plike> wrapper_like = new LambdaQueryWrapper<>();
+        wrapper_like.eq(Plike::getUserid, userid);
+        wrapper_like.eq(Plike::getPtargetid, PostID);
+        Plike plike=this.baseMapper.selectOne(wrapper_like);
+        if(plike!=null)
+        {
+            return true;
+        }
+        return false;
+    }
 }

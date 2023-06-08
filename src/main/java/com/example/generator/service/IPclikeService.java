@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPclikeService extends IService<Pclike> {
 
+    boolean searchIflike(Integer userid, Integer pcommentid);
 }

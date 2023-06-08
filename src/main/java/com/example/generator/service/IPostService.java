@@ -25,4 +25,9 @@ public interface IPostService extends IService<Post> {
     void postAddLikeCount(int postID);
 
     void postsubLikeCount(int postID);
+
+    Post getPostByPostID(int postID);
+
+
+    void addPostCommit(int postID);
 }

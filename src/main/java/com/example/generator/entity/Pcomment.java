@@ -27,6 +27,14 @@ public class Pcomment implements Serializable {
 
     private LocalDateTime time;
 
+    public Pcomment(int userid, int postID, String content) {
+        this.userid=userid;
+        ptargetid=postID;
+        likeNum=0;
+        pctext=content;
+        time=LocalDateTime.now();
+    }
+
     public Integer getPcommentid() {
         return pcommentid;
     }

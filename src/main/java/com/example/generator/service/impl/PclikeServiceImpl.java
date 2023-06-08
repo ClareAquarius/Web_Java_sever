@@ -1,6 +1,9 @@
 package com.example.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.generator.entity.Pclike;
+import com.example.generator.entity.Pcomment;
+import com.example.generator.entity.Plike;
 import com.example.generator.mapper.PclikeMapper;
 import com.example.generator.service.IPclikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,4 +20,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class PclikeServiceImpl extends ServiceImpl<PclikeMapper, Pclike> implements IPclikeService {
 
+    @Override
+    public boolean searchIflike(Integer userid, Integer pcommentid) {
+        LambdaQueryWrapper<Pclike> wrapper_like = new LambdaQueryWrapper<>();
+        wrapper_like.eq(Pclike::getUserid, userid);
+        wrapper_like.eq(Pclike::getPctargetid, pcommentid);
+        Pclike pclike=this.baseMapper.selectOne(wrapper_like);
+        if(pclike!=null)
+        {
+            return true;
+        }
+        return false;
+    }
 }

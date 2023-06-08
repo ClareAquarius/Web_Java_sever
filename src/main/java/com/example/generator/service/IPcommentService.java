@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.generator.entity.message.PostPcommentMsg;
 import com.example.generator.entity.message.PostPcommentReturnMsg;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,5 +17,7 @@ import com.example.generator.entity.message.PostPcommentReturnMsg;
  */
 public interface IPcommentService extends IService<Pcomment> {
 
-    PostPcommentReturnMsg addpcomment(PostPcommentMsg msg);
+    List<Pcomment> searchPcommentsListByPostID(int postID);
+
+    void addPcomment(Pcomment pcomment);
 }

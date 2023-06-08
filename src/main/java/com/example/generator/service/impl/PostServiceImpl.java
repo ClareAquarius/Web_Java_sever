@@ -128,5 +128,20 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         this.update(null, updateWrapper);
     }
 
+    @Override
+    public Post getPostByPostID(int postID) {
+        LambdaQueryWrapper<Post> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Post::getPostid,postID);
+        return this.baseMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public void addPostCommit(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("comment_num = comment_num  + 1");
+        this.update(null, updateWrapper);
+    }
+
+
 }
 

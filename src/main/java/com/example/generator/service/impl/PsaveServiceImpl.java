@@ -1,5 +1,6 @@
 package com.example.generator.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.generator.entity.Plike;
 import com.example.generator.entity.Psave;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.UpdateSaveMeg;
@@ -32,6 +33,19 @@ public class PsaveServiceImpl extends ServiceImpl<PsaveMapper, Psave> implements
         wrapper.eq(Psave::getUserid, userid);
         wrapper.eq(Psave::getPtargetid, postID);
         this.baseMapper.delete(wrapper);
+    }
+
+    @Override
+    public boolean searchIfsave(Integer userid, int PostID) {
+        LambdaQueryWrapper<Psave> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Psave::getUserid, userid);
+        wrapper.eq(Psave::getPtargetid, PostID);
+        Psave psave=this.baseMapper.selectOne(wrapper);
+        if(psave!=null)
+        {
+            return true;
+        }
+        return false;
     }
 
 }

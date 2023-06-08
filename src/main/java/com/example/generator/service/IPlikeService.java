@@ -16,6 +16,7 @@ public interface IPlikeService extends IService<Plike> {
 
 
     void insertLike(Plike plike);
-
     void deletetLike(Integer userid, int postID);
+    boolean searchIflike(Integer userid,int PostID);
+
 }
