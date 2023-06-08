@@ -3,15 +3,25 @@ package com.example.generator.entity.message;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BrowseReturnMeg {
+    @JsonProperty("PostID")
     private int PostID;
+    @JsonProperty("Comment")
     private int Comment;
+    @JsonProperty("Content")
     private String Content;
+    @JsonProperty("IsLiked")
     private boolean IsLiked;
+    @JsonProperty("IsSaved")
     private boolean IsSaved;
+    @JsonProperty("Like")
     private int Like;
+    @JsonProperty("PostTim")
     private String PostTime;
+    @JsonProperty("Title")
     private String Title;
+    @JsonProperty("UserName")
     private String UserName;
+    @JsonProperty("UserTelephone")
     private String UserTelephone;
     public int getPostID() {
         return PostID;

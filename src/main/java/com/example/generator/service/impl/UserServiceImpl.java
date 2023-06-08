@@ -89,15 +89,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     // 这个是给其他服务类实现的方法
     @Override
-    public Integer getUserIdByPhone(String phone) {
+    public User getUserByPhone(String phone) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getPhone, phone);
         User user = this.baseMapper.selectOne(wrapper);
-        if (user != null) {
-            return user.getUserid();
-        } else {
-            return null;
-        }
+        return user;
     }
 
 

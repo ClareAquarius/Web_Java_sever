@@ -1,6 +1,10 @@
 package com.example.generator.entity.message;
 
 public class PostMeg {
+    private String title;
+    private String userTelephone;
+    private String partition;
+    private String content;
 
     public String getUserTelephone() {
         return userTelephone;
@@ -37,9 +41,5 @@ public class PostMeg {
         this.partition = partition;
     }
 
-    private String title;
-    private String userTelephone;
-    private String partition;
-    private String content;
 
 }
