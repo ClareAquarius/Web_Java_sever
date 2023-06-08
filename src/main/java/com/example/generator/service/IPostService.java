@@ -30,4 +30,6 @@ public interface IPostService extends IService<Post> {
 
 
     void addPostCommit(int postID);
+
+    int getUseridByPostid(int postID);
 }
