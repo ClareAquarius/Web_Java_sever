@@ -39,5 +39,12 @@ public class PcommentServiceImpl extends ServiceImpl<PcommentMapper, Pcomment> i
         pcommentMapper.insertPcomment(p);
         return p.getPcommentid();
     }
+
+    @Override
+    public Pcomment getPcommentById(int target) {
+        LambdaQueryWrapper<Pcomment> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Pcomment::getPcommentid,target);
+        return this.baseMapper.selectOne(wrapper);
+    }
 }
 

@@ -18,4 +18,6 @@ public interface IPcommentService extends IService<Pcomment> {
     List<Pcomment> searchPcommentsListByPostID(int postID);
 
     int addPcomment(Pcomment pcomment);
+
+    Pcomment getPcommentById(int target);
 }
