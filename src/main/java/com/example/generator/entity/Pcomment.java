@@ -22,7 +22,7 @@ public class Pcomment implements Serializable {
 
     private Integer ptargetid;
 
-    private Integer likeNum;
+    private Integer like_num;
 
     private String pctext;
 
@@ -60,11 +60,11 @@ public class Pcomment implements Serializable {
         this.ptargetid = ptargetid;
     }
     public Integer getLikeNum() {
-        return likeNum;
+        return like_num;
     }
 
     public void setLikeNum(Integer likeNum) {
-        this.likeNum = likeNum;
+        this.like_num = likeNum;
     }
     public String getPctext() {
         return pctext;
@@ -87,7 +87,7 @@ public class Pcomment implements Serializable {
             "pcommentid=" + pcommentid +
             ", userid=" + userid +
             ", ptargetid=" + ptargetid +
-            ", likeNum=" + likeNum +
+            ", likeNum=" + like_num +
             ", pctext=" + pctext +
             ", time=" + time +
         "}";

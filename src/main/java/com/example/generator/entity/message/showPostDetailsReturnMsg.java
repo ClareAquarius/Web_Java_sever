@@ -24,14 +24,14 @@ public class showPostDetailsReturnMsg {
         isLiked = like;
         isSaved = save;
         this.like = post.getLikeNum();
-        // photos需要修改,先暂时空着，为空
+        // photos为空
         photos = new String("");
 
         postID = post.getPostid();
         postTime = String.valueOf(post.getPostTime());
         title = post.getTitle();
         
-        userAvatar = user.getPhone();
+        userAvatar = user.getProfile();
         userName = user.getName();
         userTelephone = user.getPhone();
     }
