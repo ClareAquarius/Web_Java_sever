@@ -20,4 +20,8 @@ public interface IPcommentService extends IService<Pcomment> {
     int addPcomment(Pcomment pcomment);
 
     Pcomment getPcommentById(int target);
+
+    void pcAddLikeCount(int pcommentID);
+
+    void pcSubLikeCount(int pcommentID);
 }

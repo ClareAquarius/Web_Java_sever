@@ -1,6 +1,7 @@
 package com.example.generator.controller;
 
 import com.example.generator.entity.Pcomment;
+import com.example.generator.entity.Post;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.PostPcommentMsg;
 import com.example.generator.entity.message.PostPcommentReturnMsg;
@@ -42,6 +43,7 @@ public class PcommentController {
     @RequestMapping("/showPcomments")
     public ResponseEntity<Object> showPcomments(@RequestBody showPostDetailsMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
+        User author=userService.getUserByID(postService.getUseridByPostid(msg.getPostID()));
         if(user==null)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("电话号码错误");
@@ -54,7 +56,7 @@ public class PcommentController {
             List<Object> list=new ArrayList<>();
             // 根据用户id和评论的id来查询用户是否点赞
             boolean like=pclikeService.searchIflike(user.getUserid(),pcomment.getPcommentid());
-            PostPcommentReturnMsg m=new PostPcommentReturnMsg(pcomment,user,like,list);
+            PostPcommentReturnMsg m=new PostPcommentReturnMsg(pcomment,author,like,list);
             returnMsgList.add(m);
         }
 
@@ -82,7 +84,7 @@ public class PcommentController {
         // 如果帖主不是自己,那么增加一条Notice
         if(postUserid!=user.getUserid())
         {
-            noticeService.addNotice(user.getUserid(),postUserid,msg.getPostID(),new String("punish"),msg.getContent(), target);
+            noticeService.addNotice(user.getUserid(),postUserid,msg.getPostID(),new String("pcomment"),msg.getContent(), target);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
 

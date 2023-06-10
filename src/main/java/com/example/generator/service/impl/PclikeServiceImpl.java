@@ -32,4 +32,16 @@ public class PclikeServiceImpl extends ServiceImpl<PclikeMapper, Pclike> impleme
         }
         return false;
     }
+
+    @Override
+    public void insertLike(Pclike pclike) {this.baseMapper.insert(pclike);}
+
+    @Override
+    public void deletetpcLike(Integer userid, int pcommentID) {
+        LambdaQueryWrapper<Pclike> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Pclike::getUserid, userid);
+        wrapper.eq(Pclike::getPctargetid, pcommentID);
+        this.baseMapper.delete(wrapper);
+    }
+
 }
