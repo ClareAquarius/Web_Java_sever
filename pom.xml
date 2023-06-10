@@ -77,6 +77,14 @@
 			<version>2.6</version>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>org.apache.tomcat.embed</groupId>-->
+<!--			<artifactId>tomcat-embed-core</artifactId>-->
+<!--			<version>9.0.46</version> &lt;!&ndash; 根据您的 Tomcat 版本进行调整 &ndash;&gt;-->
+<!--		</dependency>-->
+
+
+
 
 	</dependencies>
 
