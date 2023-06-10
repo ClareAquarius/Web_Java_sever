@@ -40,6 +40,11 @@
 		</dependency>
 		<!-- mybatis-plus-join-->
 		<dependency>
+			<groupId>com.tencentcloudapi</groupId>
+			<artifactId>tencentcloud-sdk-java-tms</artifactId>
+			<version>3.1.322</version>
+		</dependency>
+		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.5.2</version>

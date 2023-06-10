@@ -1,5 +1,7 @@
 package com.example.generator.entity;
 
+import org.apache.ibatis.annotations.Options;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 public class Pcomment implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private Integer pcommentid;
 
     private Integer userid;
@@ -26,6 +27,16 @@ public class Pcomment implements Serializable {
     private String pctext;
 
     private LocalDateTime time;
+
+    public Pcomment(int userid, int ptargetid, String pctext) {
+        this.userid=userid;
+        this.ptargetid=ptargetid;
+        this.pctext=pctext;
+    }
+
+    public Pcomment() {
+
+    }
 
     public Integer getPcommentid() {
         return pcommentid;

@@ -11,7 +11,7 @@
 - 文件 photos varchar(1000)
 
 CREATE TABLE post (
-  postid INT PRIMARY KEY,
+  postid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   post_partition VARCHAR(10),
   title VARCHAR(20),
@@ -32,33 +32,14 @@ CREATE TABLE post (
 - 评论时间 time datetime
 
 CREATE TABLE pcomment (
-  pcommentid INT PRIMARY KEY,
-  userid INT,
-  ptargetid INT,
-  like_num INT,
-  pctext VARCHAR(1000),
-  time DATETIME
-  );
-
-## 二级评论 ccomment
-
-- **评论id（主键）** ccommentid int
-- 用户id（用户的外键）userid int
-- 评论目标id（评论的外键）ctargetid int
-- 点赞数量 like_num bigint
-- 评论内容 cctext varchar(100)
-- 评论时间 time datetime
-- 回复用户id usertargetid int
-
-CREATE TABLE ccomment (
-ccommentid INT PRIMARY KEY,
+pcommentid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 userid INT,
-ctargetid INT,
-like_num BIGINT,
-cctext VARCHAR(100),
-time DATETIME,
-usertargetid INT
+ptargetid INT,
+like_num INT DEFAULT 0,
+pctext VARCHAR(1000),
+time DATETIME DEFAULT NOW()
 );
+
 
 ## 帖子点赞 plike
 
@@ -67,7 +48,7 @@ usertargetid INT
 - 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE plike (
-  plikeid BIGINT PRIMARY KEY,
+  plikeid BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   ptargetid INT
   );
@@ -79,21 +60,9 @@ CREATE TABLE plike (
 - 点赞目标id（帖子的外键）pctargetid int
 
 CREATE TABLE pclike (
-  pclikeid INT PRIMARY KEY,
+  pclikeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   userid INT,
   pctargetid INT
-  );
-
-## 评论的评论点赞 cclike
-
-- **点赞id**  cclikeid int
-- 点赞人id（用户的外键）userid int
-- 点赞目标id（评论的外键）cctargetid int
-
-CREATE TABLE cclike (
-  cclikeid INT PRIMARY KEY,
-  userid INT,
-  cctargetid INT
   );
 
 ## 用户 user
@@ -107,7 +76,7 @@ CREATE TABLE cclike (
 - 封禁到期时间 banTime date
 
 CREATE TABLE user (
-  userid INT PRIMARY KEY,
+  userid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   phone CHAR(15),
   email VARCHAR(255),
   password VARCHAR(255),
@@ -132,7 +101,6 @@ password VARCHAR(100)
 - 举报目标类型 targettype enum
   - 帖子
   - 帖子的评论
-  - 评论的评论
 
 - 举报目标id  ptargetid int
 - 用户id（举报人id，用户的外键）userid int
@@ -145,8 +113,8 @@ password VARCHAR(100)
 - 是否处理 finish boolean tinyint(1)
 
 CREATE TABLE sue (
-sueid INT PRIMARY KEY,
-targettype ENUM('帖子', '帖子的评论', '评论的评论'),
+sueid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+targettype ENUM('帖子', '帖子的评论'),
 ptargetid INT,
 userid INT,
 reason VARCHAR(1000),
@@ -162,19 +130,21 @@ finish BOOLEAN
 - 发送者id（用户的外键）sender int 
 - 通知类型 type enum
   - 帖子被评论 pcomment
-  - 评论被评论 ccomment
   - 被惩罚 punish
 - 通知内容 ntext varchar(100）
 - 是否已读 read tinyint(1)
+- 对应帖子 postid int
+- 对应的记录id target int
 
 CREATE TABLE notice (
-noticeid INT PRIMARY KEY,
+noticeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 receiver INT,
 sender INT,
-sender INT,
-type ENUM('帖子被评论', '评论被评论', '被惩罚'),
+type ENUM('帖子被评论', '被惩罚'),
 ntext VARCHAR(100),
-is_read TINYINT(1)
+is_read TINYINT(1),
+postid INT,
+target INT
 );
 
 ## 收藏 psave
@@ -184,7 +154,7 @@ is_read TINYINT(1)
 - 点赞目标id（帖子的外键）ptargetid int
 
 CREATE TABLE psave (
-psaveid INT PRIMARY KEY,
+psaveid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 userid INT,
 ptargetid INT
 );

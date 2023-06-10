@@ -1,10 +1,12 @@
 package com.example.generator.controller;
 
+import com.example.utils.TextModeration;
 import com.example.generator.entity.Post;
-import com.example.generator.entity.message.BrowseMeg;
-import com.example.generator.entity.message.BrowseReturnMeg;
-import com.example.generator.entity.message.PostMeg;
+import com.example.generator.entity.User;
+import com.example.generator.entity.message.*;
+import com.example.generator.service.IPlikeService;
 import com.example.generator.service.IPostService;
+import com.example.generator.service.IPsaveService;
 import com.example.generator.service.IUserService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,10 @@ public class PostController {
     private IPostService postService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IPlikeService plikeService;
+    @Autowired
+    private IPsaveService psaveService;
 
     // browse--浏览文章--根据phone电话号码，searchinfo搜索关键词，partition主题来传送文章列表
     // 注意这个 brose方法返回值，没有带 状态码 和 message了，直接返回data数据
@@ -58,7 +64,7 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.OK).body(data);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
@@ -68,9 +74,8 @@ public class PostController {
         String title = postMeg.getTitle();
         String userTelephone = postMeg.getUserTelephone();
 //
-        Integer userid = userService.getUserIdByPhone(userTelephone);
-
-        Post post = new Post(userid, title, content, partition);
+        User user = userService.getUserByPhone(userTelephone);
+        Post post = new Post(user.getUserid(), title, content, partition);
 //
         int result = postService.addPost(post);
         if (result > 0) {
@@ -129,5 +134,20 @@ public class PostController {
                 put("message", "上传失败");
             }});
         }
+    }
+
+    @PostMapping("/showDetails")
+    public ResponseEntity<Object> showDetails(@RequestBody showPostDetailsMsg msg)
+    {
+        User user=userService.getUserByPhone(msg.getUserTelephone());
+        Post post=postService.getPostByPostID(msg.getPostID());
+        if(user==null)
+        {
+            return  ResponseEntity.status(HttpStatus.OK).body("该用户不存在");
+        }
+        boolean like=plikeService.searchIflike(user.getUserid(),msg.getPostID());
+        boolean save=psaveService.searchIfsave(user.getUserid(),msg.getPostID());
+        showPostDetailsReturnMsg returnMsg=new showPostDetailsReturnMsg(post,user,like,save);
+        return ResponseEntity.status(HttpStatus.OK).body(returnMsg);
     }
 }

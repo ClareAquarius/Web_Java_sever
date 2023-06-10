@@ -1,6 +1,7 @@
 package com.example.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Plike;
 import com.example.generator.entity.Post;
 import com.example.generator.entity.Psave;
@@ -112,6 +113,42 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
             return "删除失败";
         }
     }
+
+    @Override
+    public void postAddLikeCount(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("like_num = like_num  + 1");
+        this.update(null, updateWrapper);
+    }
+
+    @Override
+    public void postsubLikeCount(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("like_num = like_num  - 1");
+        this.update(null, updateWrapper);
+    }
+
+    @Override
+    public Post getPostByPostID(int postID) {
+        LambdaQueryWrapper<Post> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Post::getPostid,postID);
+        return this.baseMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public void addPostCommit(int postID) {
+        LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Post::getPostid, postID).setSql("comment_num = comment_num  + 1");
+        this.update(null, updateWrapper);
+    }
+
+    @Override
+    public int getUseridByPostid(int postID) {
+        LambdaQueryWrapper<Post> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Post::getPostid,postID);
+        return this.baseMapper.selectOne(wrapper).getUserid();
+    }
+
 
 }
 

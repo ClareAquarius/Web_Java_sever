@@ -1,5 +1,7 @@
 package com.example.generator.entity;
 
+import org.apache.ibatis.annotations.Options;
+
 import java.io.Serializable;
 
 /**
@@ -24,9 +26,23 @@ public class Notice implements Serializable {
 
     private String ntext;
 
-    private Boolean isRead;
+    private int isRead;
 
-    public Integer getNoticeid() {
+    private int postid;
+
+    private int target;
+
+    public Notice(Integer senderid, int recrid,int postid, String type, String content, int target) {
+        receiver=recrid;
+        sender=senderid;
+        this.type=type;
+        ntext=content;
+        isRead=0;
+        this.postid=postid;
+        this.target=target;
+    }
+
+    public int getNoticeid() {
         return noticeid;
     }
 
@@ -61,12 +77,26 @@ public class Notice implements Serializable {
     public void setNtext(String ntext) {
         this.ntext = ntext;
     }
-    public Boolean getIsRead() {
+    public int getIsRead() {
         return isRead;
     }
 
-    public void setIsRead(Boolean isRead) {
+    public void setIsRead(int isRead) {
         this.isRead = isRead;
+    }
+    public int getPostid() {
+        return postid;
+    }
+
+    public void setPostid(int postid) {
+        this.postid = postid;
+    }
+    public int getTarget() {
+        return target;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
     }
 
     @Override

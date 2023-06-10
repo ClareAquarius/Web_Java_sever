@@ -14,6 +14,9 @@ import com.example.generator.entity.message.UpdateLikeMeg;
  */
 public interface IPlikeService extends IService<Plike> {
 
-    boolean updateplike(UpdateLikeMeg meg);
+
+    void insertLike(Plike plike);
+    void deletetLike(Integer userid, int postID);
+    boolean searchIflike(Integer userid,int PostID);
 
 }

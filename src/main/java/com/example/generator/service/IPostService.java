@@ -21,4 +21,15 @@ public interface IPostService extends IService<Post> {
     Integer addPost(Post post);
 
     String deletePost(Integer postId);
+
+    void postAddLikeCount(int postID);
+
+    void postsubLikeCount(int postID);
+
+    Post getPostByPostID(int postID);
+
+
+    void addPostCommit(int postID);
+
+    int getUseridByPostid(int postID);
 }
