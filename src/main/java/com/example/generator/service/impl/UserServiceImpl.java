@@ -87,6 +87,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return null;
     }
 
+    @Override
+    public User getUserByToken(String token) {
+        Object obj=redisTemplate.opsForValue().get(token);
+        // 如果token不为空，那么调用fastjson2里面的方法实现反序列化
+        if(obj!=null)
+        {
+            User user= JSON.parseObject(JSON.toJSONString(obj),User.class);
+            return getUserByPhone(user.getPhone());
+        }
+        return null;
+    }
+
     // 这个是给其他服务类实现的方法
     @Override
     public User getUserByPhone(String phone) {

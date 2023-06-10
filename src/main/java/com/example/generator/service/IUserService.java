@@ -21,7 +21,10 @@ public interface IUserService extends IService<User> {
 
     Map<String, Object> getUserInfo(String token);
 
+    User getUserByToken(String token);
+
     User getUserByPhone(String phone);
 
     User getUserByID(Integer id);
+
 }
