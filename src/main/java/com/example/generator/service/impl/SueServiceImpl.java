@@ -16,5 +16,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SueServiceImpl extends ServiceImpl<SueMapper, Sue> implements ISueService {
-
+    @Override
+    public String submitSue(Sue sue){
+        int result = this.baseMapper.insert(sue);
+        if (result > 0) {
+            return "举报成功";
+        } else {
+            return "举报失败";
+        }
+    }
 }

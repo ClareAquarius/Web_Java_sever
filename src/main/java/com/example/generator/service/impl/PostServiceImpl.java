@@ -11,7 +11,7 @@ import com.example.generator.mapper.PlikeMapper;
 import com.example.generator.mapper.PostMapper;
 import com.example.generator.mapper.PsaveMapper;
 import com.example.generator.mapper.UserMapper;
-import com.example.generator.service.IPostService;
+import com.example.generator.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
     private PsaveMapper psaveMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private IUserService userService;
 
     @Override
     public List<BrowseReturnMeg> broseAll(String partition, String searchinfo, String userTelephone) {
@@ -57,8 +59,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
             modifiedPost.setPostTime(post.getPostTime().toString());
             modifiedPost.setTitle(post.getTitle());
 
-            modifiedPost.setUserName(user.getName()); // 设置用户名
-            modifiedPost.setUserTelephone(user.getPhone()); // 设置用户电话
+            User author = userService.getUserByID(post.getUserid());
+
+            modifiedPost.setUserName(author.getName()); // 设置用户名
+            modifiedPost.setUserTelephone(author.getPhone()); // 设置用户电话
 
             // 查询plikeMapper，查看该用户是否点赞
             LambdaQueryWrapper<Plike> wrapper_like = new LambdaQueryWrapper<>();
@@ -106,7 +110,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
 
     @Override
     public String deletePost(Integer postId) {
-        int result = this.baseMapper.deleteById(postId);
+        LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Post::getPostid, postId);
+        int result = this.baseMapper.delete(wrapper);
         if (result > 0) {
             return "删除成功";
         } else {

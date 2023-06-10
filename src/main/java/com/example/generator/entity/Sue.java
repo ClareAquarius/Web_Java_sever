@@ -31,6 +31,16 @@ public class Sue implements Serializable {
 
     private Boolean finish;
 
+    public Sue(String targettype, Integer ptargetid, Integer userid, String reason, LocalDateTime sueTime, String status, Boolean finish) {
+        this.targettype = targettype;
+        this.ptargetid = ptargetid;
+        this.userid = userid;
+        this.reason = reason;
+        this.sueTime = sueTime;
+        this.status = status;
+        this.finish = finish;
+    }
+
     public Integer getSueid() {
         return sueid;
     }
