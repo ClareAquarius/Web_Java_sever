@@ -82,7 +82,7 @@ public class PcommentController {
         // 如果帖主不是自己,那么增加一条Notice
         if(postUserid!=user.getUserid())
         {
-            noticeService.addNotice(user.getUserid(),postUserid,msg.getPostID(),new String("帖子被评论"),msg.getContent(), target);
+            noticeService.addNotice(user.getUserid(),postUserid,msg.getPostID(),new String("punish"),msg.getContent(), target);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
 

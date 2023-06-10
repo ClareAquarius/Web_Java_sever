@@ -141,7 +141,7 @@ CREATE TABLE notice (
 noticeid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 receiver INT,
 sender INT,
-type ENUM('帖子被评论', '被惩罚'),
+type ENUM('pcomment', 'punish'),
 ntext VARCHAR(100),
 is_read TINYINT(1),
 postid INT,

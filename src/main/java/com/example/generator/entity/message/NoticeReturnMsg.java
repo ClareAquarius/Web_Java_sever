@@ -14,9 +14,10 @@ public class NoticeReturnMsg {
     private String time;
     private String type;
 
-    public NoticeReturnMsg(Notice notice, User user, int postid, User sender,String time,String type) {
+    public NoticeReturnMsg(Notice notice, User user, User sender, String time) {
+        noticeID=notice.getNoticeid();
         content=notice.getNtext();
-        postID=postid;
+        postID=notice.getPostid();
         if(notice.getIsRead()==0)
         {
             read=false;
@@ -26,10 +27,9 @@ public class NoticeReturnMsg {
         }
         receiverName=user.getName();
         senderName=sender.getName();
-        // 之后该前端,把
-        target=0;
+        target=notice.getTarget();
         this.time=time;
-        this.type=type;
+        this.type=notice.getType();
     }
 
 

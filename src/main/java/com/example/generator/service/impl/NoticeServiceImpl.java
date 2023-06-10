@@ -1,6 +1,7 @@
 package com.example.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Notice;
 import com.example.generator.mapper.NoticeMapper;
 import com.example.generator.service.INoticeService;
@@ -35,5 +36,15 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         wrapper.eq(Notice::getReceiver,userid);
         List<Notice> list= this.baseMapper.selectList(wrapper);
         return list;
+    }
+
+    @Override
+    public boolean read_notice(int id) {
+        LambdaUpdateWrapper<Notice>wrapper=new LambdaUpdateWrapper<>();
+        wrapper.eq(Notice::getNoticeid,id).setSql("is_read = 1");
+        // 执行更新操作
+        int affectedRows = noticeMapper.update(null, wrapper);
+        // 根据更新结果判断是否更新成功
+        return affectedRows > 0;
     }
 }
