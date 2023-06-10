@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.out;
+
 
 /**
  * <p>
@@ -87,20 +89,29 @@ public class PostController {
     @PostMapping("/RichEditorUploadImage")
     public ResponseEntity<Map<String, Object>> richEditorUploadImage(MultipartHttpServletRequest request) {
         try {
+        String projectRootPath = System.getProperty("user.dir");
+        out.println("projectRootPath= "+projectRootPath);
             List<MultipartFile> files = request.getFiles("wangeditor-uploaded-image");
             List<String> urls = new ArrayList<>();
+
+            String basePath = projectRootPath+"/src/main/resources/static/images/PostImages/";
+
+
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
                     String ext = FilenameUtils.getExtension(file.getOriginalFilename());
                     String name = "image_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
                     String newFilename = name + "." + ext;
-//                    String newFilename = name + ".jpg";
 //                    String dst = "./static/images/PostImages/" + newFilename;
-                    String path = request.getServletContext().getRealPath("/images/PostImages/");
+//                    String path = request.getServletContext().getRealPath("/images/PostImages/");
+                    // 这个path大概= C:\Users\liuy\AppData\Local\Temp\tomcat-docbase.8080.2478560337122190439\images\PostImages\（8080.后面的数字随机不定）
 //                    out.println("path= "+path);
-                    String dst = path + newFilename;
-//                    out.println(dst);
-                    String fileUrl = "/static/images/PostImages/" + newFilename;
+//                    String dst = path + newFilename;
+
+                    String dst = basePath + newFilename;
+                    out.println("dst= "+dst);
+//                    String fileUrl = "/static/images/PostImages/" + newFilename;
+                    String fileUrl = "/images/PostImages/" + newFilename;
                     urls.add(fileUrl);
                     File destFile = new File(dst);
                     if (!destFile.getParentFile().exists()) {
@@ -115,7 +126,8 @@ public class PostController {
                     put("url", urls);
                 }});
             }});
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new HashMap<String, Object>() {{
                 put("errno", 1);

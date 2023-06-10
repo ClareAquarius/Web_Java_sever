@@ -25,4 +25,5 @@ public interface IUserService extends IService<User> {
 
     User getUserByID(Integer id);
 
+    User getUserByID(Integer sender);
 }
