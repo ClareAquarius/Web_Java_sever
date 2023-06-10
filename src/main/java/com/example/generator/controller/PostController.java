@@ -55,16 +55,8 @@ public class PostController {
     public ResponseEntity<List<BrowseReturnMeg>> browse(@RequestBody BrowseMeg meg) {
         String partition = meg.getpartition();
         String searchinfo = meg.getSearchinfo();
-
-        if (partition.equals("主页") || partition.isEmpty()) {
-            // searchinfo是用于搜索帖子的关键词或信息的变量
-            if (searchinfo == null)
-            {
-                List<BrowseReturnMeg> data = postService.broseAll(partition, searchinfo, meg.getUserTelephone());
-                return ResponseEntity.status(HttpStatus.OK).body(data);
-            }
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        List<BrowseReturnMeg> data = postService.broseAll(partition, searchinfo, meg.getUserTelephone());
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
@@ -141,13 +133,14 @@ public class PostController {
     {
         User user=userService.getUserByPhone(msg.getUserTelephone());
         Post post=postService.getPostByPostID(msg.getPostID());
+        User author = userService.getUserByID(post.getUserid());
         if(user==null)
         {
             return  ResponseEntity.status(HttpStatus.OK).body("该用户不存在");
         }
         boolean like=plikeService.searchIflike(user.getUserid(),msg.getPostID());
         boolean save=psaveService.searchIfsave(user.getUserid(),msg.getPostID());
-        showPostDetailsReturnMsg returnMsg=new showPostDetailsReturnMsg(post,user,like,save);
+        showPostDetailsReturnMsg returnMsg=new showPostDetailsReturnMsg(post,author,like,save);
         return ResponseEntity.status(HttpStatus.OK).body(returnMsg);
     }
 

@@ -40,8 +40,17 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
 
     @Override
     public List<BrowseReturnMeg> broseAll(String partition, String searchinfo, String userTelephone) {
-        // 获得帖子全部Post数据
-        List<Post> data = this.list();
+        List<Post> data = new ArrayList<Post>();
+        if (partition.equals("主页") || partition.isEmpty()){
+            if(searchinfo == null){
+                // 获得帖子全部Post数据
+                data = this.list();
+            } else {
+                // 按照 searchinfo 进行模糊查询，获取符合条件的所有帖子
+            }
+        } else {
+            // 按照 partition 进行精确查询，获取数据库中partition对应的所有帖子
+        }
         // 根据phone获得user信息
         LambdaQueryWrapper<User> wrapper_user=new LambdaQueryWrapper<>();
         wrapper_user.eq(User::getPhone,userTelephone);
