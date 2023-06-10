@@ -30,6 +30,7 @@ public class showPostDetailsReturnMsg {
         postID = post.getPostid();
         postTime = String.valueOf(post.getPostTime());
         title = post.getTitle();
+        
         userAvatar = user.getPhone();
         userName = user.getName();
         userTelephone = user.getPhone();
