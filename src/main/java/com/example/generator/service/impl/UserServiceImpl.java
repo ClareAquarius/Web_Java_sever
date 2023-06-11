@@ -2,11 +2,11 @@ package com.example.generator.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
 import com.example.generator.mapper.UserMapper;
 import com.example.generator.service.IUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @author baomidou
  * @since 2023-06-02
  */
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
@@ -60,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User existingPhone = this.baseMapper.selectOne(wrapper);
         if (existingPhone != null) {
             return "该手机号已被注册";
-        } 
+        }
         wrapper.eq(User::getEmail, registerMeg.getEmail());
         User existingEmail = this.baseMapper.selectOne(wrapper);
         if (existingEmail != null) {
@@ -115,6 +116,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public Integer getUserIdByToken(String token) {
+//        out.println(token);
+        Object obj=redisTemplate.opsForValue().get(token);
+        // 如果token不为空，那么调用fastjson2里面的方法实现反序列化
+        if(obj!=null)
+        {
+            User user= JSON.parseObject(JSON.toJSONString(obj),User.class);
+//            out.println("obj不空！！");
+            return user.getUserid();
+        }
+        return null;
+    }
+
+    @Override
     public User getUserByToken(String token) {
         Object obj=redisTemplate.opsForValue().get(token);
         // 如果token不为空，那么调用fastjson2里面的方法实现反序列化
@@ -141,6 +156,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         wrapper.eq(User::getUserid, id);
         User user = this.baseMapper.selectOne(wrapper);
         return user;
+    }
+
+    @Override
+    public String updateUser(Integer userId, String avatarUrl, String email, String name) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserid, userId);
+        User user = this.baseMapper.selectOne(wrapper);
+        if (user == null) {
+            return "用户不存在";
+        } else {
+            user.setProfile(avatarUrl);
+            user.setEmail(email);
+            user.setName(name);
+            int result = this.baseMapper.update(user,wrapper);
+            if (result > 0) {
+                return "更新成功";
+            } else {
+                return "更新失败";
+            }
+        }
     }
 
 

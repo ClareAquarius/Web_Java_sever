@@ -3,3 +3,7 @@
 <mapper namespace="com.example.generator.mapper.UserMapper">
 
 </mapper>
+
+<!--<update id="updateById" parameterType="com.example.model.User">-->
+<!--update user set name = #{name}, email = #{email}, profile = #{profile} where id = #{id}-->
+<!--</update>-->
