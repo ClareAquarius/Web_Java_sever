@@ -1,7 +1,10 @@
 package com.example.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Pcomment;
+import com.example.generator.entity.Plike;
+import com.example.generator.entity.Post;
 import com.example.generator.mapper.PcommentMapper;
 import com.example.generator.service.IPcommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -38,6 +41,27 @@ public class PcommentServiceImpl extends ServiceImpl<PcommentMapper, Pcomment> i
         p.setPctext(pcomment.getPctext());
         pcommentMapper.insertPcomment(p);
         return p.getPcommentid();
+    }
+
+    @Override
+    public Pcomment getPcommentById(int target) {
+        LambdaQueryWrapper<Pcomment> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Pcomment::getPcommentid,target);
+        return this.baseMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public void pcAddLikeCount(int pcommentID) {
+        LambdaUpdateWrapper<Pcomment> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Pcomment::getPcommentid, pcommentID).setSql("like_num = like_num + 1");
+        this.update(null, updateWrapper);
+    }
+
+    @Override
+    public void pcSubLikeCount(int pcommentID) {
+        LambdaUpdateWrapper<Pcomment> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Pcomment::getPcommentid, pcommentID).setSql("like_num = like_num - 1");
+        this.update(null, updateWrapper);
     }
 }
 
