@@ -116,7 +116,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Integer getUser(String token) {
+    public Integer getUserIdByToken(String token) {
 //        out.println(token);
         Object obj=redisTemplate.opsForValue().get(token);
         // 如果token不为空，那么调用fastjson2里面的方法实现反序列化

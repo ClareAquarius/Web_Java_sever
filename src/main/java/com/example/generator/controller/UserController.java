@@ -3,12 +3,7 @@ package com.example.generator.controller;
 import com.example.common.Result;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
-import com.example.generator.entity.message.PhoneMeg;
-import com.example.generator.entity.message.UpdateUserInfoMeg;
-import com.example.generator.entity.message.UserReturnMeg;
 import com.example.generator.service.IUserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,7 +101,7 @@ public class UserController {
         out.println(updateUserInfoMeg.getName());
         String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
         out.println("token= "+modifiedString);
-        Integer userid= userService.getUser(modifiedString);
+        Integer userid= userService.getUserIdByToken(modifiedString);
 //根据用户ID更新用户信息
         String result = userService.updateUser(userid, updateUserInfoMeg.getAvatarUrl(), updateUserInfoMeg.getEmail(), updateUserInfoMeg.getName());
 //        out.println("更新了没？？？userid= "+userid);
