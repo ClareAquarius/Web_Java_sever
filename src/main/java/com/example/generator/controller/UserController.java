@@ -2,8 +2,10 @@ package com.example.generator.controller;
 
 import com.example.common.Result;
 import com.example.generator.entity.User;
+import com.example.generator.entity.message.*;
 import com.example.generator.service.IUserService;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -27,25 +29,38 @@ public class UserController {
 
     // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
     @PostMapping("/login")
-    public Result<Map<String,Object>> login(@RequestBody User user){
+    public ResponseEntity<Result<Map<String,Object>>> login(@RequestBody User user){
         Map<String,Object> data=userService.login(user);
         if(data!=null) {
-            return Result.success(data);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
         }
-        return Result.fail(2002,"用户名或者密码错误");
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("用户名或密码错误"));
     }
 
     // register--注册,验证数据之后 在user数据库添加表项
     @PostMapping("/register")
-    public Result<String> register(@RequestBody User user) {
-        String data= userService.register(user);
+    public ResponseEntity<Result<String>> register(@RequestBody RegisterMeg registerMeg) {
+        String data= userService.register(registerMeg);
         if(data == "注册成功")
         {
-            return Result.success(data);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
         }
         else
         {
-            return Result.fail(data);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
+        }
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<Result<String>>changePassword(@RequestBody ChangePasswordMeg changePasswordMeg) {
+        String data= userService.changePassword(changePasswordMeg);
+        if(data == "密码修改成功")
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
         }
     }
 

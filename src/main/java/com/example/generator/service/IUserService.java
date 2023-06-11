@@ -1,6 +1,7 @@
 package com.example.generator.service;
 
 import com.example.generator.entity.User;
+import com.example.generator.entity.message.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
@@ -17,7 +18,9 @@ public interface IUserService extends IService<User> {
 
     Map<String, Object> login(User user);
 
-    String register(User user);
+    String register(RegisterMeg registerMeg);
+
+    String changePassword(ChangePasswordMeg changePasswordMeg);
 
     Map<String, Object> getUserInfo(String token);
 
