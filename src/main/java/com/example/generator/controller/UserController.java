@@ -1,11 +1,16 @@
 package com.example.generator.controller;
 
 import com.example.common.Result;
+import com.example.generator.entity.Admin;
 import com.example.generator.entity.User;
+import com.example.generator.entity.message.UserDetails;
+import com.example.generator.service.IAdminService;
 import com.example.generator.service.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +29,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
-
+    @Autowired
+    private IAdminService adminService;
     // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
     @PostMapping("/login")
     public Result<Map<String,Object>> login(@RequestBody User user){
@@ -61,5 +67,20 @@ public class UserController {
             return Result.success(data);
         }
         return  Result.fail("无效token");
+    }
+
+    @PostMapping("showUsers")
+    public Result<Object> showUsers(@RequestHeader("Authorization") String authorizationHeader)
+    {
+        String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
+        //根据token查看管理员信息
+        Map<String,Object> data= adminService.getAdminInfo(modifiedString);
+        //结果为空,则返回失败
+        if(data==null)
+        {
+            return Result.fail("无效token");
+        }
+        List<UserDetails> list=userService.getUserDetailsList();
+        return Result.success(list);
     }
 }

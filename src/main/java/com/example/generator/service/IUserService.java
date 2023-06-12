@@ -2,7 +2,9 @@ package com.example.generator.service;
 
 import com.example.generator.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.generator.entity.message.UserDetails;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,4 +29,7 @@ public interface IUserService extends IService<User> {
 
     User getUserByID(Integer id);
 
+    List<UserDetails> getUserDetailsList();
+
+    Integer addUserspunishment(Integer postuserid);
 }

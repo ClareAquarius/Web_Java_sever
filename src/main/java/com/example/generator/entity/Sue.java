@@ -1,5 +1,7 @@
 package com.example.generator.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,7 +27,7 @@ public class Sue implements Serializable {
 
     private String reason;
 
-    private LocalDateTime sueTime;
+    private LocalDateTime sue_time;
 
     private String status;
 
@@ -36,10 +38,11 @@ public class Sue implements Serializable {
         this.ptargetid = ptargetid;
         this.userid = userid;
         this.reason = reason;
-        this.sueTime = sueTime;
+        this.sue_time = sueTime;
         this.status = status;
         this.finish = finish;
     }
+    public Sue(){}
 
     public Integer getSueid() {
         return sueid;
@@ -77,11 +80,10 @@ public class Sue implements Serializable {
         this.reason = reason;
     }
     public LocalDateTime getSueTime() {
-        return sueTime;
+        return sue_time;
     }
-
     public void setSueTime(LocalDateTime sueTime) {
-        this.sueTime = sueTime;
+        this.sue_time = sueTime;
     }
     public String getStatus() {
         return status;
@@ -106,7 +108,7 @@ public class Sue implements Serializable {
             ", ptargetid=" + ptargetid +
             ", userid=" + userid +
             ", reason=" + reason +
-            ", sueTime=" + sueTime +
+            ", sueTime=" + sue_time +
             ", status=" + status +
             ", finish=" + finish +
         "}";
