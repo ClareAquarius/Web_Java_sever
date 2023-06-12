@@ -3,11 +3,15 @@ package com.example.generator.controller;
 import com.example.common.Result;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
+import com.example.generator.service.IAdminService;
 import com.example.generator.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import java.util.Map;
 
@@ -29,15 +33,16 @@ import static java.lang.System.out;
 public class UserController {
     @Autowired
     private IUserService userService;
-
+    @Autowired
+    private IAdminService adminService;
     // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
     @PostMapping("/login")
-    public ResponseEntity<Result<Map<String,Object>>> login(@RequestBody User user){
+    public Result<Map<String,Object>> login(@RequestBody User user){
         Map<String,Object> data=userService.login(user);
         if(data!=null) {
-            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
+            return Result.success(data);
         }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("用户名或密码错误"));
+        return Result.fail(2002,"用户名或者密码错误");
     }
 
     // register--注册,验证数据之后 在user数据库添加表项
@@ -81,7 +86,6 @@ public class UserController {
         return  Result.fail("无效token");
     }
 
-
     @PostMapping("/getInfo")
     public ResponseEntity<UserReturnMeg> getUserInfoByPhone(@RequestBody PhoneMeg phoneMeg) {
 //    public Result<UserReturnMeg> getUserInfoByPhone(@RequestBody String phone) {
@@ -116,5 +120,19 @@ public class UserController {
         }
     }
 
+    @PostMapping("showUsers")
+    public Result<Object> showUsers(@RequestHeader("Authorization") String authorizationHeader)
+    {
+        String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
+        //根据token查看管理员信息
+        Map<String,Object> data= adminService.getAdminInfo(modifiedString);
+        //结果为空,则返回失败
+        if(data==null)
+        {
+            return Result.fail("无效token");
+        }
+        List<UserDetails> list=userService.getUserDetailsList();
+        return Result.success(list);
+    }
 
 }

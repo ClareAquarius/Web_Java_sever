@@ -28,6 +28,14 @@ public class User implements Serializable {
     private String profile;
 
     private LocalDate banTime;
+    private Integer punishnum;
+    public Integer getPunishnum() {
+        return punishnum;
+    }
+
+    public void setPunishnum(Integer punishnum) {
+        this.punishnum = punishnum;
+    }
 
     public User() {
         

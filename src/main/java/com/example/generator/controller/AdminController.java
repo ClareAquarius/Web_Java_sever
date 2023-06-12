@@ -38,7 +38,7 @@ public class AdminController {
     @GetMapping("/admininfo")
     public Result<Map<String,Object>> getAdminInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
-        //根据token查看用户信息
+        //根据token查看管理员信息
         Map<String,Object> data= adminService.getAdminInfo(modifiedString);
         //结果不为空,则生成token
         if(data!=null)
