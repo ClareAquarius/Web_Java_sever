@@ -37,6 +37,20 @@ public class User implements Serializable {
         this.punishnum = punishnum;
     }
 
+    public User() {
+        
+    }
+
+    public User(Integer userid, String phone, String email, String password, String name, String profile, LocalDate banTime) {
+        this.userid = userid;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.profile = profile;
+        this.banTime = banTime;
+    }
+
     public Integer getUserid() {
         return userid;
     }

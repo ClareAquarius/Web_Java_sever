@@ -1,6 +1,5 @@
 package com.example.generator.controller;
 
-import com.example.utils.TextModeration;
 import com.example.generator.entity.Post;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
@@ -25,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.utils.TextModeration.getSuggestion;
 import static java.lang.System.out;
 
 
@@ -65,6 +65,13 @@ public class PostController {
         String partition = postMeg.getPartition();
         String title = postMeg.getTitle();
         String userTelephone = postMeg.getUserTelephone();
+        String checkText = title + " " + content;
+
+        String flag = getSuggestion(checkText);
+
+        if(flag == "Block") {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("含不良信息，请修改！");
+        }
 //
         User user = userService.getUserByPhone(userTelephone);
         Post post = new Post(user.getUserid(), title, content, partition);

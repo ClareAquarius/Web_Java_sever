@@ -1,17 +1,21 @@
 package com.example.generator.controller;
 
 import com.example.common.Result;
-import com.example.generator.entity.Admin;
 import com.example.generator.entity.User;
-import com.example.generator.entity.message.UserDetails;
+import com.example.generator.entity.message.*;
 import com.example.generator.service.IAdminService;
 import com.example.generator.service.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import java.util.Map;
+
+import static java.lang.System.out;
 
 /**
  * <p>
@@ -43,15 +47,28 @@ public class UserController {
 
     // register--注册,验证数据之后 在user数据库添加表项
     @PostMapping("/register")
-    public Result<String> register(@RequestBody User user) {
-        String data= userService.register(user);
+    public ResponseEntity<Result<String>> register(@RequestBody RegisterMeg registerMeg) {
+        String data= userService.register(registerMeg);
         if(data == "注册成功")
         {
-            return Result.success(data);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
         }
         else
         {
-            return Result.fail(data);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
+        }
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<Result<String>>changePassword(@RequestBody ChangePasswordMeg changePasswordMeg) {
+        String data= userService.changePassword(changePasswordMeg);
+        if(data == "密码修改成功")
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
         }
     }
 
@@ -69,6 +86,40 @@ public class UserController {
         return  Result.fail("无效token");
     }
 
+    @PostMapping("/getInfo")
+    public ResponseEntity<UserReturnMeg> getUserInfoByPhone(@RequestBody PhoneMeg phoneMeg) {
+//    public Result<UserReturnMeg> getUserInfoByPhone(@RequestBody String phone) {
+        out.println(phoneMeg.getPhone());
+        User user = userService.getUserByPhone(phoneMeg.getPhone());
+        UserReturnMeg userReturnMeg = new UserReturnMeg(user.getProfile(), user.getName(), user.getEmail());
+
+//        return Result.success(userReturnMeg);
+//        out.println(user.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(userReturnMeg);
+
+    }
+
+    @PostMapping("/updateUserInfo")
+    public ResponseEntity<UserReturnMeg> updateUserInfo(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UpdateUserInfoMeg updateUserInfoMeg) {
+
+        out.println(updateUserInfoMeg.getName());
+        String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
+        out.println("token= "+modifiedString);
+        Integer userid= userService.getUserIdByToken(modifiedString);
+//根据用户ID更新用户信息
+        String result = userService.updateUser(userid, updateUserInfoMeg.getAvatarUrl(), updateUserInfoMeg.getEmail(), updateUserInfoMeg.getName());
+//        out.println("更新了没？？？userid= "+userid);
+        if(result.equals("更新成功")){
+            //查询用户最新信息返回给前端
+            User updatedUser = userService.getUserByID(userid);
+            UserReturnMeg userReturnMeg = new UserReturnMeg(updatedUser.getProfile(), updatedUser.getName(), updatedUser.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).body(userReturnMeg);
+//            return ResponseEntity.status(HttpStatus.OK).body("111");
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     @PostMapping("showUsers")
     public Result<Object> showUsers(@RequestHeader("Authorization") String authorizationHeader)
     {
@@ -83,4 +134,5 @@ public class UserController {
         List<UserDetails> list=userService.getUserDetailsList();
         return Result.success(list);
     }
+
 }
