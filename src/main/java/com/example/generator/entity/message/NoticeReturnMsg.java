@@ -3,6 +3,9 @@ package com.example.generator.entity.message;
 import com.example.generator.entity.Notice;
 import com.example.generator.entity.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class NoticeReturnMsg {
     private String content;
     private int noticeID;
@@ -30,6 +33,25 @@ public class NoticeReturnMsg {
         target=notice.getTarget();
         this.time=time;
         this.type=notice.getType();
+    }
+
+    public NoticeReturnMsg(Notice notice, User user) {
+        content=notice.getNtext();
+        noticeID=notice.getNoticeid();
+        postID=notice.getPostid();
+        if(notice.getIsRead()==0)
+        {
+            read=false;
+        }
+        else {
+            read=true;
+        }
+        receiverName=user.getName();
+        senderName="系统";
+        target=notice.getTarget();
+        this.type=notice.getType();
+        LocalDateTime dateTime = LocalDateTime.now();
+        time=dateTime.toString();
     }
 
 

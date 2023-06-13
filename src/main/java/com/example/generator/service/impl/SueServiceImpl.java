@@ -52,4 +52,6 @@ public class SueServiceImpl extends ServiceImpl<SueMapper, Sue> implements ISueS
         return this.baseMapper.selectList(wrapper);
     }
 
+
+
 }
