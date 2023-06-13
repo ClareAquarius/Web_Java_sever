@@ -37,12 +37,14 @@ public class UserController {
     private IAdminService adminService;
     // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
     @PostMapping("/login")
-    public Result<Map<String,Object>> login(@RequestBody User user){
-        Map<String,Object> data=userService.login(user);
-        if(data!=null) {
-            return Result.success(data);
+    public ResponseEntity<Result<Object>> login(@RequestBody User user){
+        Object data=userService.login(user);
+        if(data==null) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("账号或密码错误"));
+        } else if(data=="你的账号已被封禁") {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("你的账号已被封禁"));
         }
-        return Result.fail(2002,"用户名或者密码错误");
+        return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
     }
 
     // register--注册,验证数据之后 在user数据库添加表项
