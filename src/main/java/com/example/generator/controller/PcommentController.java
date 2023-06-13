@@ -43,7 +43,6 @@ public class PcommentController {
     @RequestMapping("/showPcomments")
     public ResponseEntity<Object> showPcomments(@RequestBody showPostDetailsMsg msg){
         User user=userService.getUserByPhone(msg.getUserTelephone());
-        User author=userService.getUserByID(postService.getUseridByPostid(msg.getPostID()));
         if(user==null)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("电话号码错误");
@@ -52,11 +51,11 @@ public class PcommentController {
         List<PostPcommentReturnMsg> returnMsgList=new ArrayList<>();
 
         for(Pcomment pcomment:pcommentList){
-            // *****这里省略 评论的评论 获得方式****
             List<Object> list=new ArrayList<>();
             // 根据用户id和评论的id来查询用户是否点赞
             boolean like=pclikeService.searchIflike(user.getUserid(),pcomment.getPcommentid());
-            PostPcommentReturnMsg m=new PostPcommentReturnMsg(pcomment,author,like,list);
+            User pccoment_user=userService.getUserByID(pcomment.getUserid());
+            PostPcommentReturnMsg m=new PostPcommentReturnMsg(pcomment,pccoment_user,like,list);
             returnMsgList.add(m);
         }
 

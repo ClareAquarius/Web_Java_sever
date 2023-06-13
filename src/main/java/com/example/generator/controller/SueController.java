@@ -12,6 +12,7 @@ import com.example.generator.entity.message.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.common.Result;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -70,12 +71,13 @@ public class SueController {
         Integer postuserid=postService.getUseridByPostid(sue.getPtargetid());
         // 对用户进行处罚
         Integer num=userService.addUserspunishment(postuserid);
+        LocalDate banTime = userService.getUserByID(postuserid).getBanTime();
         // 标记sue已处理,并标记处理结果
         sueService.manageSue("OK",msg.getSueID());
         // 给用户通知
         Post post=postService.getPostByPostID(sue.getPtargetid());
-        String punishcontent="这是第"+num+"次违规发言/发帖";
-        noticeService.addNotice(999,postuserid,post.getPostid(),"punish",punishcontent,post.getPostid());
+        String punishcontent="这是第"+num+"次违规发言/发帖,"+"禁止登录的截止日期为"+banTime.toString();
+        noticeService.addNotice(0,postuserid,post.getPostid(),"punish",punishcontent,post.getPostid());
         return Result.success("已处理");
     }
     @PostMapping("/noViolation")

@@ -188,5 +188,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
     }
 
+    @Override
+    public List<UserDetails> getUserDetailsList() {
+        List<User> userList=this.list();
+        List<UserDetails> list =new ArrayList<>();
+        for(User user:userList)
+        {
+            UserDetails userDetails=new UserDetails(user);
+            list.add(userDetails);
+        }
+        return list;
+    }
 
+    @Override
+    public Integer addUserspunishment(Integer postuserid) {
+        LocalDate currentDate = LocalDate.now();  // 当前日期
+        User user = this.baseMapper.selectOne(new LambdaQueryWrapper<User>()
+                .eq(User::getUserid, postuserid));
+        // 获取当前处罚次数
+        Integer punishNum = user.getPunishnum()+1;
+        LocalDate banTime = user.getBanTime();
+        // 第n次处罚 禁n天
+        if (banTime != null && banTime.isAfter(currentDate)) {
+            banTime = banTime.plusDays(punishNum);
+        } else {
+            banTime = currentDate.plusDays(punishNum);
+        }
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getUserid, postuserid)
+                .setSql("punishnum = punishnum + 1")
+                .set(User::getBanTime, banTime);
+        this.update(null, wrapper);
+        return punishNum;
+    }
 }

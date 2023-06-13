@@ -2,15 +2,9 @@ package com.example.generator.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.example.common.Result;
-import com.example.generator.entity.Notice;
-import com.example.generator.entity.Pcomment;
-import com.example.generator.entity.Post;
-import com.example.generator.entity.User;
+import com.example.generator.entity.*;
 import com.example.generator.entity.message.NoticeReturnMsg;
-import com.example.generator.service.INoticeService;
-import com.example.generator.service.IPcommentService;
-import com.example.generator.service.IPostService;
-import com.example.generator.service.IUserService;
+import com.example.generator.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -40,7 +34,8 @@ public class NoticeController {
     private IUserService userService;
     @Autowired
     private IPcommentService pcommentService;
-
+    @Autowired
+    private ISueService sueService;
     // 得到用户相关的notice列表信息.根据token得到用户信息
     @GetMapping("/getNotice")
     public ResponseEntity<Object> getNotice(@RequestHeader("Authorization") String authorizationHeader){
@@ -57,10 +52,17 @@ public class NoticeController {
         List<NoticeReturnMsg> noticeReturnMsgs=new ArrayList<>();
         for (Notice notice : noticeList)
         {
-            User sender=userService.getUserByID(notice.getSender());
+            if(notice.getType().equals("pcomment"))
             {
-                Pcomment pcomment = pcommentService.getPcommentById(notice.getTarget());
-                NoticeReturnMsg returnMsg=new NoticeReturnMsg(notice,user,sender,pcomment.getTime().toString());
+                User sender=userService.getUserByID(notice.getSender());
+                {
+                    Pcomment pcomment = pcommentService.getPcommentById(notice.getTarget());
+                    NoticeReturnMsg returnMsg=new NoticeReturnMsg(notice,user,sender,pcomment.getTime().toString());
+                    noticeReturnMsgs.add(returnMsg);
+                }
+            }
+            else {
+                NoticeReturnMsg returnMsg=new NoticeReturnMsg(notice,user);
                 noticeReturnMsgs.add(returnMsg);
             }
         }
