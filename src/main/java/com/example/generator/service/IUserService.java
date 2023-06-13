@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public interface IUserService extends IService<User> {
 
-    Map<String, Object> login(User user);
+    Object login(User user);
 
 
     //注册--涉及增加

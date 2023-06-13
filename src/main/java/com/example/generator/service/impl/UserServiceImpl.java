@@ -34,31 +34,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     //登录--验证用户的账号和密码,并为用户生成token,存入redis
     @Override
-    public Map<String, Object> login(User user) {
+    public Object login(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getPhone,user.getPhone());
         wrapper.eq(User::getPassword,user.getPassword());
         User loginuser =this.baseMapper.selectOne(wrapper);
-
+        if(loginuser==null) {
+            return null;
+        }
         // 检查是否被禁
         LocalDate currentDate = LocalDate.now();
         if(loginuser.getBanTime().isAfter(currentDate)) {
-            return null;
+            return "你的账号已被封禁";
         }
 
         // 如果返回不为null,则生成token,并存入redis
-        if(loginuser!=null) {
-            //  随机生成token
-            String key="user:"+ UUID.randomUUID();
-            //  将 token 和 用户 作为键值对 存入redis
-            //  设置 redis 的 过期时间是30分钟
-            redisTemplate.opsForValue().set(key,loginuser,30, TimeUnit.MINUTES);
+        //  随机生成token
+        String key="user:"+ UUID.randomUUID();
+        //  将 token 和 用户 作为键值对 存入redis
+        //  设置 redis 的 过期时间是30分钟
+        redisTemplate.opsForValue().set(key,loginuser,30, TimeUnit.MINUTES);
 
-            Map<String,Object> data= new HashMap<>();
-            data.put("token",key);
-            return data;
-        }
-        return null;
+        Map<String,Object> data= new HashMap<>();
+        data.put("token",key);
+        return data;
     }
 
     //注册--涉及增加

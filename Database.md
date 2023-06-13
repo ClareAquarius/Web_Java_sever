@@ -83,7 +83,7 @@ CREATE TABLE user (
   password VARCHAR(255),
   name VARCHAR(50),
   profile VARCHAR(50),
-  banTime TIME
+  ban_time DATE,
   punishnum INT DEFAULT 0
   );
 
