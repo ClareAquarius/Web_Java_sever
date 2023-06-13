@@ -72,9 +72,11 @@ CREATE TABLE pclike (
 - 邮箱号 email varchar(255)
 - 密码 password varchar(255) 
 - 用户名称（昵称) name varchar(50)
-- 头像 profile  varchar(50)
+- 头像 profile  varchar(100)
 - 封禁到期时间 banTime date 
 - 被举报次数  punishnum 
+
+
 
 CREATE TABLE user (
   userid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +86,6 @@ CREATE TABLE user (
   name VARCHAR(50),
   profile VARCHAR(50),
   banTime TIME
-  punishnum INT DEFAULT 0
   );
 
 ## 管理员 admin
@@ -117,7 +118,7 @@ password VARCHAR(100)
 
 CREATE TABLE sue (
 sueid INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-targettype ENUM('post', 'pcomment'),
+targettype ENUM('帖子', '帖子的评论'),
 ptargetid INT,
 userid INT,
 reason VARCHAR(1000),

@@ -107,7 +107,7 @@ public class UserController {
         out.println("token= "+modifiedString);
         Integer userid= userService.getUserIdByToken(modifiedString);
 //根据用户ID更新用户信息
-        String result = userService.updateUser(userid, updateUserInfoMeg.getAvatarUrl(), updateUserInfoMeg.getEmail(), updateUserInfoMeg.getName());
+        String result = userService.updateUser(userid, updateUserInfoMeg.getAvatarURL(), updateUserInfoMeg.getEmail(), updateUserInfoMeg.getName());
 //        out.println("更新了没？？？userid= "+userid);
         if(result.equals("更新成功")){
             //查询用户最新信息返回给前端
