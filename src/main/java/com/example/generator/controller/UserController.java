@@ -123,7 +123,7 @@ public class UserController {
     }
 
     @PostMapping("showUsers")
-    public Result<Object> showUsers(@RequestHeader("Authorization") String authorizationHeader)
+    public ResponseEntity<Result<Object>> showUsers(@RequestHeader("Authorization") String authorizationHeader)
     {
         String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
         //根据token查看管理员信息
@@ -131,10 +131,10 @@ public class UserController {
         //结果为空,则返回失败
         if(data==null)
         {
-            return Result.fail("无效token");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("无效token"));
         }
         List<UserDetails> list=userService.getUserDetailsList();
-        return Result.success(list);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.success(list));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.generator.controller;
 
+import com.example.common.Result;
 import com.example.generator.entity.Post;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
@@ -60,17 +61,17 @@ public class PostController {
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public ResponseEntity<String> addPost(@RequestBody PostMeg postMeg) {
+    public ResponseEntity<Result<String>> addPost(@RequestBody PostMeg postMeg) {
         String content = postMeg.getContent();
         String partition = postMeg.getPartition();
         String title = postMeg.getTitle();
         String userTelephone = postMeg.getUserTelephone();
-        String checkText = title + " " + content;
+        
+        String flag1 = getSuggestion(title);
+        String flag2 = getSuggestion(content);
 
-        String flag = getSuggestion(checkText);
-
-        if(flag == "Block") {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("含不良信息，请修改！");
+        if(flag1.equals("Block")||flag2.equals("Block")) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("含不良信息，请修改！"));
         }
 //
         User user = userService.getUserByPhone(userTelephone);
@@ -78,9 +79,9 @@ public class PostController {
 //
         int result = postService.addPost(post);
         if (result > 0) {
-            return ResponseEntity.status(HttpStatus.OK).body("发布成功");
+            return ResponseEntity.status(HttpStatus.OK).body(Result.success("发布成功"));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("发布失败");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("发布失败"));
         }
 //        return ResponseEntity.status(HttpStatus.OK).body(userid.toString());
     }
