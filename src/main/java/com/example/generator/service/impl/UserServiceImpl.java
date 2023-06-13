@@ -2,8 +2,10 @@ package com.example.generator.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.generator.entity.User;
+import com.example.generator.entity.message.UserDetails;
 import com.example.generator.entity.message.*;
 import com.example.generator.mapper.UserMapper;
 import com.example.generator.service.IUserService;
@@ -11,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 
 import static java.lang.System.out;
 
@@ -27,7 +29,6 @@ import static java.lang.System.out;
  * @author baomidou
  * @since 2023-06-02
  */
-
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
@@ -40,6 +41,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         wrapper.eq(User::getPhone,user.getPhone());
         wrapper.eq(User::getPassword,user.getPassword());
         User loginuser =this.baseMapper.selectOne(wrapper);
+
+        // 检查是否被禁
+        LocalDate currentDate = LocalDate.now();
+        if(loginuser.getBanTime().isAfter(currentDate)) {
+            return null;
+        }
+
         // 如果返回不为null,则生成token,并存入redis
         if(loginuser!=null) {
             //  随机生成token
