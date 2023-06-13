@@ -72,7 +72,7 @@ CREATE TABLE pclike (
 - 邮箱号 email varchar(255)
 - 密码 password varchar(255) 
 - 用户名称（昵称) name varchar(50)
-- 头像 profile  varchar(50)
+- 头像 profile  varchar(100)
 - 封禁到期时间 banTime date
 
 CREATE TABLE user (

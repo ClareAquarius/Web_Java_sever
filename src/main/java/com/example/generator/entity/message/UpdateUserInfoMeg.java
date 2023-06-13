@@ -1,16 +1,16 @@
 package com.example.generator.entity.message;
 
 public class UpdateUserInfoMeg {
-    private String avatarUrl;
+    private String avatarURL;
     private String email;
     private String name;
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatarURL() {
+        return avatarURL;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 
     public String getEmail() {

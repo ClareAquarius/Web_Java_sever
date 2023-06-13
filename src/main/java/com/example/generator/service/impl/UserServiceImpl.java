@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.System.out;
+
 /**
  * <p>
  *  服务实现类
@@ -117,15 +119,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Integer getUserIdByToken(String token) {
-//        out.println(token);
+        out.println(token);
         Object obj=redisTemplate.opsForValue().get(token);
         // 如果token不为空，那么调用fastjson2里面的方法实现反序列化
         if(obj!=null)
         {
             User user= JSON.parseObject(JSON.toJSONString(obj),User.class);
-//            out.println("obj不空！！");
+            out.println("obj不空！！");
             return user.getUserid();
         }
+        out.println("obj空空");
         return null;
     }
 
