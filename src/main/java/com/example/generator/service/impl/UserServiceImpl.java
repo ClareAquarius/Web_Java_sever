@@ -187,7 +187,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             }
         }
     }
-
+    
     @Override
     public List<UserDetails> getUserDetailsList() {
         List<User> userList=this.list();
@@ -199,6 +199,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return list;
     }
+
+    @Override
+    public List<UserDetails> getUserDetailsList() {
+        List<User> userList=this.list();
+        List<UserDetails> list =new ArrayList<>();
+        for(User user:userList)
+        {
+            UserDetails userDetails=new UserDetails(user);
+            list.add(userDetails);
+        }
+        return list;
+
 
     @Override
     public Integer addUserspunishment(Integer postuserid) {

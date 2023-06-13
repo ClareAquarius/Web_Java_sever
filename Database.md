@@ -73,7 +73,7 @@ CREATE TABLE pclike (
 - 密码 password varchar(255) 
 - 用户名称（昵称) name varchar(50)
 - 头像 profile  varchar(100)
-- 封禁到期时间 banTime date DEFAULT NOW()
+- 封禁到期时间 ban_time date DEFAULT NOW()
 - 被举报次数  punishnum 
 
 
