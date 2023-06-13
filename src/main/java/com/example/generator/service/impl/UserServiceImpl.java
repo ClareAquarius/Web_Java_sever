@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
+import static java.lang.System.out;
+
 /**
  * <p>
  *  服务实现类
@@ -124,15 +126,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Integer getUserIdByToken(String token) {
-//        out.println(token);
+        out.println(token);
         Object obj=redisTemplate.opsForValue().get(token);
         // 如果token不为空，那么调用fastjson2里面的方法实现反序列化
         if(obj!=null)
         {
             User user= JSON.parseObject(JSON.toJSONString(obj),User.class);
-//            out.println("obj不空！！");
+            out.println("obj不空！！");
             return user.getUserid();
         }
+        out.println("obj空空");
         return null;
     }
 
@@ -163,43 +166,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         wrapper.eq(User::getUserid, id);
         User user = this.baseMapper.selectOne(wrapper);
         return user;
-    }
-
-    @Override
-    public List<UserDetails> getUserDetailsList() {
-        List<User> userList=this.list();
-        List<UserDetails> list =new ArrayList<>();
-        for(User user:userList)
-        {
-            UserDetails userDetails=new UserDetails(user);
-            list.add(userDetails);
-        }
-        return list;
-    }
-
-    @Override
-    public Integer addUserspunishment(Integer postuserid) {
-        LocalDate currentDate = LocalDate.now();  // 当前日期
-        User user = this.baseMapper.selectOne(new LambdaQueryWrapper<User>()
-                .eq(User::getUserid, postuserid));
-        // 获取当前处罚次数
-        Integer punishNum = user.getPunishnum()+1;
-        LocalDate banTime = user.getBanTime();
-
-        // 第n次处罚 禁n天
-        if (banTime != null && banTime.isAfter(currentDate)) {
-            banTime = banTime.plusDays(punishNum);
-        } else {
-            banTime = currentDate.plusDays(punishNum);
-        }
-
-        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(User::getUserid, postuserid)
-                .setSql("punishnum = punishnum + 1")
-                .set(User::getBanTime, banTime);
-
-        this.update(null, wrapper);
-        return punishNum;
     }
 
     @Override
