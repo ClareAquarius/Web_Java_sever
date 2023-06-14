@@ -24,4 +24,6 @@ public interface IPcommentService extends IService<Pcomment> {
     void pcAddLikeCount(int pcommentID);
 
     void pcSubLikeCount(int pcommentID);
+
+    String deleteCommentByUserID(Integer userID);
 }

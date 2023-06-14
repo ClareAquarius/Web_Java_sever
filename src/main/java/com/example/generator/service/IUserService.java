@@ -33,13 +33,14 @@ public interface IUserService extends IService<User> {
 
     User getUserByToken(String token);
 
+    String userDelete(String phone);
 
     User getUserByPhone(String phone);
 
     User getUserByID(Integer id);
 
     String updateUser(Integer userId, String avatarUrl, String email, String name);
-    List<UserDetails> getUserDetailsList();
+    List<UserDetails> getUserDetailsList(String name, String phone);
 
     Integer addUserspunishment(Integer postuserid);
 }

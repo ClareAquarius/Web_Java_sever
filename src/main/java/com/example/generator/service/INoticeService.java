@@ -20,4 +20,8 @@ public interface INoticeService extends IService<Notice> {
     List<Notice> getNoticeListByUserID(Integer userid);
 
     boolean read_notice(int id);
+
+    String deleteNoticebySender(Integer userID);
+
+    String deleteNoticebyReceiver(Integer userID);
 }

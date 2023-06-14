@@ -2,7 +2,7 @@ package com.example.generator.service;
 
 import com.example.generator.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
-
+import com.example.generator.entity.message.*;
 import java.util.Map;
 
 /**

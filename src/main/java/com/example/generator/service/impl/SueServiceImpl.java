@@ -52,6 +52,17 @@ public class SueServiceImpl extends ServiceImpl<SueMapper, Sue> implements ISueS
         return this.baseMapper.selectList(wrapper);
     }
 
+    @Override
+    public String deleteSuebyUserID(Integer userID) {
+        LambdaQueryWrapper<Sue> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Sue::getUserid, userID);
+        int result = this.baseMapper.delete(wrapper);
+        if (result >= 0 ) {
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
+    }
 
 
 }

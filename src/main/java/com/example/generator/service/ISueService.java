@@ -22,6 +22,7 @@ public interface ISueService extends IService<Sue> {
     void manageSue(String status, int sueID);
 
     List<Sue> getUnreadSuelist();
-
+    
+    String deleteSuebyUserID(Integer userID);
 
 }

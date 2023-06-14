@@ -28,6 +28,7 @@ public interface IPostService extends IService<Post> {
 
     Post getPostByPostID(int postID);
 
+    String deletePostbyUserID(Integer userID);
 
     void addPostCommit(int postID);
 

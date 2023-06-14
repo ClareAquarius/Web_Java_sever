@@ -4,15 +4,16 @@ import com.example.common.Result;
 import com.example.generator.entity.User;
 import com.example.generator.entity.message.*;
 import com.example.generator.service.IAdminService;
+import com.example.generator.service.INoticeService;
+import com.example.generator.service.IPcommentService;
+import com.example.generator.service.IPostService;
+import com.example.generator.service.ISueService;
 import com.example.generator.service.IUserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import java.util.Map;
 
 import static java.lang.System.out;
@@ -33,6 +34,14 @@ import static java.lang.System.out;
 public class UserController {
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IPostService postService;
+    @Autowired
+    private IPcommentService pcommentService;
+    @Autowired
+    private ISueService sueService;
+    @Autowired
+    private INoticeService noticeService;
     @Autowired
     private IAdminService adminService;
     // login登录--登录验证用户的账号和密码,并为用户生成token,存入redis
@@ -71,6 +80,29 @@ public class UserController {
         else
         {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
+        }
+    }
+    
+    @PostMapping("/userDelete")
+    public ResponseEntity<Result<String>> userDelete(@RequestBody PhoneMeg phoneMeg) {
+        User user = userService.getUserByPhone(phoneMeg.getPhone());
+        String postDeleteData = postService.deletePostbyUserID(user.getUserid());
+        String commentDeleteData = pcommentService.deleteCommentByUserID(user.getUserid());
+        String sueDeleteData = sueService.deleteSuebyUserID(user.getUserid());
+        String noticeDeleteData1 = noticeService.deleteNoticebySender(user.getUserid());
+        String noticeDeleteData2 = noticeService.deleteNoticebyReceiver(user.getUserid());
+        if (postDeleteData == "删除成功" && commentDeleteData  == "删除成功" && sueDeleteData == "删除成功" && noticeDeleteData1 == "删除成功" && noticeDeleteData2 == "删除成功") {
+            String data= userService.userDelete(phoneMeg.getPhone());
+            if(data == "注销成功")
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(Result.success(data));
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail(data));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("注销失败"));
         }
     }
 
@@ -123,17 +155,9 @@ public class UserController {
     }
 
     @PostMapping("showUsers")
-    public ResponseEntity<Result<Object>> showUsers(@RequestHeader("Authorization") String authorizationHeader)
+    public ResponseEntity<Result<Object>> showUsers(@RequestBody UserDetailsMeg userDetailsMeg)
     {
-        String modifiedString = authorizationHeader.replaceAll("Bearer ", "");
-        //根据token查看管理员信息
-        Map<String,Object> data= adminService.getAdminInfo(modifiedString);
-        //结果为空,则返回失败
-        if(data==null)
-        {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("无效token"));
-        }
-        List<UserDetails> list=userService.getUserDetailsList();
+        List<UserDetails> list=userService.getUserDetailsList(userDetailsMeg.getName(), userDetailsMeg.getPhone());
         return ResponseEntity.status(HttpStatus.OK).body(Result.success(list));
     }
 

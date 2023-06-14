@@ -134,6 +134,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
     }
 
     @Override
+    public String deletePostbyUserID(Integer userID) {
+        LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Post::getUserid, userID);
+        int result = this.baseMapper.delete(wrapper);
+        if (result >= 0 ) {
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
+    }
+
+    @Override
     public String deletePost(Integer postId) {
         LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Post::getPostid, postId);
