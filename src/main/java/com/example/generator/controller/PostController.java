@@ -69,8 +69,7 @@ public class PostController {
         
         String flag1 = getSuggestion(title);
         String flag2 = getSuggestion(content);
-
-        if(flag1.equals("Block")||flag2.equals("Block")) {
+        if(!(flag1.equals("Pass") && flag2.equals("Pass"))) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Result.fail("含不良信息，请修改！"));
         }
 //
@@ -153,8 +152,8 @@ public class PostController {
     }
 
     @PostMapping("/deletePost")
-    public ResponseEntity<Object> deletePost(@RequestBody DeleteMeg deletemeg) {
+    public ResponseEntity<Result<String>> deletePost(@RequestBody DeleteMeg deletemeg) {
         String msg = postService.deletePost(deletemeg.getPostID());
-        return ResponseEntity.status(HttpStatus.OK).body("111");
+        return ResponseEntity.status(HttpStatus.OK).body(Result.success(msg));
     }
 }
