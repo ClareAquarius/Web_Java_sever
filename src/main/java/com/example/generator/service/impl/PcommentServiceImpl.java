@@ -6,10 +6,10 @@ import com.example.generator.entity.Pcomment;
 import com.example.generator.entity.Plike;
 import com.example.generator.entity.Post;
 import com.example.generator.mapper.PcommentMapper;
-import com.example.generator.service.IPcommentService;
+import com.example.generator.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -23,6 +23,8 @@ import java.util.List;
  */
 @Service
 public class PcommentServiceImpl extends ServiceImpl<PcommentMapper, Pcomment> implements IPcommentService {
+    @Autowired
+    private IPostService postService;
     @Resource
     private PcommentMapper pcommentMapper;
     @Override
@@ -62,6 +64,25 @@ public class PcommentServiceImpl extends ServiceImpl<PcommentMapper, Pcomment> i
         LambdaUpdateWrapper<Pcomment> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Pcomment::getPcommentid, pcommentID).setSql("like_num = like_num - 1");
         this.update(null, updateWrapper);
+    }
+    @Override
+    public String deleteCommentByUserID(Integer userID) {
+        LambdaQueryWrapper<Pcomment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Pcomment::getUserid, userID);
+        List<Pcomment> commentsToDelete = this.baseMapper.selectList(wrapper); // 查询被删除的评论数据
+        int result = this.baseMapper.delete(wrapper);
+        if (result >= 0) {
+            if (result > 0) {
+                for (Pcomment comment : commentsToDelete) {
+                    LambdaUpdateWrapper<Post> updateWrapper = new LambdaUpdateWrapper<>();
+                    updateWrapper.eq(Post::getPostid, comment.getPtargetid()).setSql("comment_num = comment_num - 1");
+                    this.postService.update(updateWrapper);
+                }
+            }
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
     }
 }
 

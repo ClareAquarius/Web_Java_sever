@@ -4,7 +4,6 @@ import com.example.generator.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDetails {
-    private boolean IDpass;
     private boolean ban;
     private String email;
     private String name;
@@ -13,19 +12,12 @@ public class UserDetails {
     private Integer punishnum;
 
     public UserDetails(User user) {
-        IDpass= true;
-        // 先设置为false
         ban= false;
         email= user.getEmail();
         name=user.getName();
         num=user.getUserid();
         phone= user.getPhone();
         punishnum=user.getPunishnum();
-    }
-
-    @JsonProperty("IDpass")
-    public boolean isIDpass() {
-        return IDpass;
     }
 
     public String getName() {
@@ -58,10 +50,6 @@ public class UserDetails {
 
     public void setPunishnum(Integer punishnum) {
         this.punishnum = punishnum;
-    }
-
-    public void setIDpass(boolean IDpass) {
-        this.IDpass = IDpass;
     }
 
     public boolean isBan() {

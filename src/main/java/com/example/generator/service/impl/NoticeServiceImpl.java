@@ -47,4 +47,28 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         // 根据更新结果判断是否更新成功
         return affectedRows > 0;
     }
+
+    @Override
+    public String deleteNoticebySender(Integer userID) {
+        LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Notice::getSender, userID);
+        int result = this.baseMapper.delete(wrapper);
+        if (result >= 0 ) {
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
+    }
+
+    @Override
+    public String deleteNoticebyReceiver(Integer userID) {
+        LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Notice::getReceiver, userID);
+        int result = this.baseMapper.delete(wrapper);
+        if (result >= 0 ) {
+            return "删除成功";
+        } else {
+            return "删除失败";
+        }
+    }
 }

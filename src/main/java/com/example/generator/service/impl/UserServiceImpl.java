@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -105,6 +104,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         this.baseMapper.update(existingPhone, wrapper);
         return "密码修改成功";
     }
+    @Override
+    public String userDelete(String phone) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getPhone, phone);
+        User existingPhone = this.baseMapper.selectOne(wrapper);
+        if (existingPhone == null) {
+            return "该手机号不存在";
+        }
+        this.baseMapper.delete(wrapper);
+        return "注销成功";
+    }
     // 验证token,并返回用户数据
     @Override
     public Map<String, Object> getUserInfo(String token) {
@@ -189,27 +199,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
     
     @Override
-    public List<UserDetails> getUserDetailsList() {
+    public List<UserDetails> getUserDetailsList(String name, String phone) {
         List<User> userList=this.list();
         List<UserDetails> list =new ArrayList<>();
         for(User user:userList)
         {
-            UserDetails userDetails=new UserDetails(user);
-            list.add(userDetails);
+            if (phone != "") {
+                if (user.getPhone().equals(phone)) {
+                    UserDetails userDetails=new UserDetails(user);
+                    list.add(userDetails);
+                    break;
+                }
+            } else if (name != "") {
+                if (user.getName().equals(name)) {
+                    UserDetails userDetails=new UserDetails(user);
+                    list.add(userDetails);
+                }
+            } else {
+                UserDetails userDetails=new UserDetails(user);
+                list.add(userDetails);
+            }
         }
         return list;
     }
-
-    @Override
-    public List<UserDetails> getUserDetailsList() {
-        List<User> userList=this.list();
-        List<UserDetails> list =new ArrayList<>();
-        for(User user:userList)
-        {
-            UserDetails userDetails=new UserDetails(user);
-            list.add(userDetails);
-        }
-        return list;
 
 
     @Override
