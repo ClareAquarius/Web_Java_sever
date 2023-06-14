@@ -2,8 +2,8 @@ package com.example.generator.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.generator.entity.Admin;
-import com.example.generator.entity.User;
 import com.example.generator.mapper.AdminMapper;
 import com.example.generator.service.IAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -65,4 +65,37 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return null;
     }
 
+    @Override
+    public boolean searchAdminByAccount(String account) {
+        LambdaQueryWrapper<Admin> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Admin::getAccount,account);
+        Admin admin=this.baseMapper.selectOne(wrapper);
+        if(admin!=null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void changePasswordByAccount(String account, String password1) {
+        LambdaUpdateWrapper<Admin> wrapper=new LambdaUpdateWrapper<>();
+        wrapper.eq(Admin::getAccount,account).set(Admin::getPassword,password1);
+        this.baseMapper.update(null,wrapper);
+    }
+
+    @Override
+    public void deleteAdminByAccount(String account) {
+        LambdaQueryWrapper<Admin> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Admin::getAccount,account);
+        this.baseMapper.delete(wrapper);
+    }
+
+    @Override
+    public void addAdmin(String account, String password1) {
+        Admin admin=new Admin();
+        admin.setAccount(account);
+        admin.setPassword(password1);
+        this.baseMapper.insert(admin);
+    }
 }
