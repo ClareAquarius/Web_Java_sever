@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import java.nio.charset.StandardCharsets;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -66,7 +66,7 @@ public class PostController {
         String partition = postMeg.getPartition();
         String title = postMeg.getTitle();
         String userTelephone = postMeg.getUserTelephone();
-        
+
         String flag1 = getSuggestion(title);
         String flag2 = getSuggestion(content);
         if(!(flag1.equals("Pass") && flag2.equals("Pass"))) {
