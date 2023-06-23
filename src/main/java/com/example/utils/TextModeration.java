@@ -7,6 +7,7 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.tms.v20201229.TmsClient;
 import com.tencentcloudapi.tms.v20201229.models.*;
 import java.util.Base64;
+import java.io.UnsupportedEncodingException;
 
 public class TextModeration
 {
@@ -26,7 +27,15 @@ public class TextModeration
             TmsClient client = new TmsClient(cred, "ap-guangzhou", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             TextModerationRequest req = new TextModerationRequest();
-            req.setContent(new String(Base64.getEncoder().encode(inStr.getBytes())));
+            try {
+                // 其他代码不变
+        
+                req.setContent(new String(Base64.getEncoder().encode(inStr.getBytes("UTF-8")), "UTF-8"));
+        
+                // 其他代码不变
+            } catch (UnsupportedEncodingException e) {
+                System.out.println(e.toString());
+            }
             // 返回的resp是一个TextModerationResponse的实例，与请求对象对应
             TextModerationResponse resp = client.TextModeration(req);
             // 输出json格式的字符串回包
